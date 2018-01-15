@@ -32,6 +32,7 @@ var WLPaymentRequestState = {
     }
 };
 
+
 var WLPaymentRequest = function () {
     var _cardHolderName, _cardNumber, _expDateMonth, _expDateYear, _cvCode, _encryptedPayload, _endpoint;
     var _success, _error;
