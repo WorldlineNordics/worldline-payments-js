@@ -32,9 +32,8 @@ var WLPaymentRequestState = {
     }
 };
 
-
 var WLPaymentRequest = function () {
-    var _cardHolderName, _cardNumber, _expDateMonth, _expDateYear, _cvCode, _encryptedPayload, _endpoint;
+    var _cardHolderName, _cardNumber, _expDateMonth, _expDateYear, _cvCode, _encryptedPayload, _endpoint, _referenceId, _provider;
     var _success, _error;
     var _state = WLPaymentRequestState.NEW;
 
@@ -43,6 +42,11 @@ var WLPaymentRequest = function () {
             _cardHolderName = n;
             return this
         },
+		storedUser: function(n) {
+			if ("provider" in n) _provider = n.provider;
+			if ("referenceId" in n) _referenceId = n.referenceId;
+			return this
+		}
         chdForm: function (document, tag) {
             if (tag && document && typeof document === 'object') {
                 var chdElements = document.querySelectorAll('['+tag+']');
@@ -111,18 +115,34 @@ var WLPaymentRequest = function () {
         }
     });
 
-    function sendPayment(success, error, encryptedPayload, endpoint, cardHolderName, cardNumber, expDateMonth, expDateYear, cvCode) {
+    function sendPayment(success, error, encryptedPayload, endpoint, cardHolderName, cardNumber, expDateMonth, expDateYear, cvCode, referenceId, provider) {
 
-        var xhttp = new XMLHttpRequest();
-
-        var data = JSON.stringify({
+	 var data = JSON.stringify({
             cardHolderName: cardHolderName,
             cardNumber: cardNumber,
             expDateMonth: expDateMonth,
             expDateYear: expDateYear,
             cvCode: cvCode,
+            encryptedPayload: encryptedPayload,
+			referenceId: referenceId,
+			provider: provider
+        });
+		
+		sendHttpRequest(success, error, endpoint, data);
+       
+    }
+	
+	function getPaymentOptions(success, error, encryptedPayload, endpoint) {
+		
+		 var data = JSON.stringify({
             encryptedPayload: encryptedPayload
         });
+		
+		sendHttpRequest(success, error, endpoint, data);
+	}
+
+	function sendHttpRequest(success, error, endpoint, data)  {
+		 var xhttp = new XMLHttpRequest();
 
         xhttp.open("POST", endpoint, true);
         xhttp.timeout = 60000;
@@ -164,8 +184,9 @@ var WLPaymentRequest = function () {
 
         _state = WLPaymentRequestState.SENT;
         xhttp.send(data);
-    }
-
+		
+	}
+	
     return _self;
 };
 
