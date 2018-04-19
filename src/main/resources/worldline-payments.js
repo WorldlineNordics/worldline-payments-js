@@ -181,7 +181,7 @@ var WLPaymentOptionsRequest = function () {
 	
 	var _encryptedPayload, _endpoint;
 	var _success, _error; 
-	
+	var _state = WLPaymentRequestState.NEW;
 	var _self = {
 		deviceAPIRequest: function (n) {
          _encryptedPayload = n.encryptedPayload;
@@ -201,13 +201,18 @@ var WLPaymentOptionsRequest = function () {
            return this
        }}
        
+	 Object.defineProperty(_self, "state", {
+	        get: function () {
+	            return _state;
+	        }
+	    });
+	
 	function sendRequest(encryptedPayload, endpoint, success, error) {
 		
 		var xhttp = new XMLHttpRequest();
 
 	    xhttp.open("GET", endpoint + "?encryptedPayload=" + encryptedPayload, true);
 	    xhttp.timeout = 60000;
-	    xhttp.setRequestHeader("Content-type", "application/json");
 
 	    xhttp.onload = function () {
 	        if (this.status >= 200 && this.status < 300) {
