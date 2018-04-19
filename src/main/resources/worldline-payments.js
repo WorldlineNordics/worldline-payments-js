@@ -9,7 +9,7 @@
  *      .onSuccess(callback)
  *      .onError(callback)
  *      .send();
- *
+ *      
  *  Where
  *  - The form has input fields for cardNumber, cardExpiryMonth, cardExpiryYear, cardCVC.
  *    Note that the form input fields may not have "name", as that could risk that the cardholderdata gets
@@ -17,6 +17,33 @@
  *  - The deviceAPIRequest contains a JSON with encryptedPayload and deviceEndpoint.
  *  - Callbacks for success and error. Error callback provides a JSON with status and statusText.
  *    The success callback contains an encryptedResponse that requires decryption on server side.
+ *    
+ *    
+ * Usage for VisaCheckout:
+ * var Request = new WLPaymentRequest()
+ *      .referenceId(referenceId)
+ *      .deviceAPIRequest(deviceAPIRequest)
+ *      .onSuccess(callback)
+ *      .onError(callback)
+ *      .send();
+ *      
+ *  Where
+ *  - The reference Id contains the call id obtained from VisaCheckout.
+ *  - The deviceAPIRequest contains a JSON with encryptedPayload and deviceEndpoint.
+ *  - Callbacks for success and error. Error callback provides a JSON with status and statusText.
+ *    The success callback contains an encryptedResponse that requires decryption on server side.    
+ * Usage for Get Payment Options Request for StoredUserService:
+ * new WLPaymentOptionsRequest()
+ *           .deviceAPIRequest(JSON.parse(JSON.parse(response).deviceAPIRequest))
+ *           .onSuccess(resolve)
+ *           .onError(reject)
+ *           .send() 
+ *
+ * Where
+ *  - The deviceAPIRequest contains a JSON with encryptedPayload and deviceEndpoint.
+ *  - Callbacks for success and error. Error callback provides a JSON with status and statusText.
+ *    The success callback contains an encryptedResponse that requires decryption on server side. 
+ * 
  */
 
 var WLPaymentRequestState = {
