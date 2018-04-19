@@ -176,3 +176,77 @@ var WLPaymentRequest = function () {
     return _self;
 };
 
+
+var WLPaymentOptionsRequest = function () {
+	
+	var _encryptedPayload, _endpoint;
+	var _success, _error; 
+	
+	var _self = {
+		deviceAPIRequest: function (n) {
+         _encryptedPayload = n.encryptedPayload;
+         _endpoint = n.deviceEndpoint;
+         return this
+       },
+       onSuccess: function (n) {
+           _success = n;
+           return this
+       },
+       onError: function (n) {
+           _error = n;
+           return this
+       },
+       send: function () {
+    	   sendRequest(_encryptedPayload, _endpoint, _success, _error);
+           return this
+       }}
+       
+	function sendRequest(encryptedPayload, endpoint, success, error) {
+		
+		var xhttp = new XMLHttpRequest();
+
+	    xhttp.open("GET", endpoint + "?encryptedPayload=" + encryptedPayload, true);
+	    xhttp.timeout = 60000;
+	    xhttp.setRequestHeader("Content-type", "application/json");
+
+	    xhttp.onload = function () {
+	        if (this.status >= 200 && this.status < 300) {
+	            _state = WLPaymentRequestState.OK;
+	            success(JSON.parse(xhttp.response));
+	        } else if (this.status === 405) {
+	            _state = WLPaymentRequestState.ERROR;
+	            error({
+	                status: this.status,
+	                statusText: 'Please verify the Worldline Device API URL'
+	            });
+	        } else {
+	            _state = WLPaymentRequestState.ERROR;
+	            error({
+	                status: this.status,
+	                statusText: xhttp.statusText
+	            });
+	        }
+	    };
+	    xhttp.onerror = function () {
+	        _state = WLPaymentRequestState.ERROR;
+	        error({
+	            status: this.status,
+	            statusText: xhttp.statusText === '' ? 'Could not send transaction.' : xhttp.statusText
+	        });
+	    };
+	    xhttp.ontimeout = function () {
+	        _state = WLPaymentRequestState.ERROR;
+	        error({
+	            status: this.status,
+	            statusText: xhttp.statusText
+	        });
+
+	    };
+
+	    _state = WLPaymentRequestState.SENT;
+	    xhttp.send();
+	    }
+		
+	    return _self;
+	 
+}
