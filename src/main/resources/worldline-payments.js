@@ -101,6 +101,10 @@ var WLPaymentRequest = function () {
             if ("cvCode" in n) _cvCode = n.cardCVC;
             return this
         },
+        referenceId: function (n) {
+            _referenceId = n;
+            return this
+        },
         cardNumber: function (n) {
             _cardNumber = n;
             return this
@@ -131,7 +135,7 @@ var WLPaymentRequest = function () {
             return this
         },
         send: function () {
-            sendPayment(_success, _error, _encryptedPayload, _endpoint, _cardHolderName, _cardNumber, _expDateMonth, _expDateYear, _cvCode);
+            sendPayment(_success, _error, _encryptedPayload, _endpoint, _cardHolderName, _cardNumber, _expDateMonth, _expDateYear, _cvCode, _referenceId, _provider);
             return this
         }
     };
