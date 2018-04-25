@@ -9,7 +9,7 @@
  *      .onSuccess(callback)
  *      .onError(callback)
  *      .send();
- *
+ *      
  *  Where
  *  - The form has input fields for cardNumber, cardExpiryMonth, cardExpiryYear, cardCVC.
  *    Note that the form input fields may not have "name", as that could risk that the cardholderdata gets
@@ -17,6 +17,33 @@
  *  - The deviceAPIRequest contains a JSON with encryptedPayload and deviceEndpoint.
  *  - Callbacks for success and error. Error callback provides a JSON with status and statusText.
  *    The success callback contains an encryptedResponse that requires decryption on server side.
+ *    
+ *    
+ * Usage for VisaCheckout:
+ * var Request = new WLPaymentRequest()
+ *      .referenceId(referenceId)
+ *      .deviceAPIRequest(deviceAPIRequest)
+ *      .onSuccess(callback)
+ *      .onError(callback)
+ *      .send();
+ *      
+ *  Where
+ *  - The reference Id contains the call id obtained from VisaCheckout.
+ *  - The deviceAPIRequest contains a JSON with encryptedPayload and deviceEndpoint.
+ *  - Callbacks for success and error. Error callback provides a JSON with status and statusText.
+ *    The success callback contains an encryptedResponse that requires decryption on server side.    
+ * Usage for Get Payment Options Request for StoredUserService:
+ * new WLPaymentOptionsRequest()
+ *           .deviceAPIRequest(JSON.parse(JSON.parse(response).deviceAPIRequest))
+ *           .onSuccess(resolve)
+ *           .onError(reject)
+ *           .send() 
+ *
+ * Where
+ *  - The deviceAPIRequest contains a JSON with encryptedPayload and deviceEndpoint.
+ *  - Callbacks for success and error. Error callback provides a JSON with status and statusText.
+ *    The success callback contains an encryptedResponse that requires decryption on server side. 
+ * 
  */
 
 var WLPaymentRequestState = {
@@ -32,9 +59,8 @@ var WLPaymentRequestState = {
     }
 };
 
-
 var WLPaymentRequest = function () {
-    var _cardHolderName, _cardNumber, _expDateMonth, _expDateYear, _cvCode, _encryptedPayload, _endpoint;
+    var _cardHolderName, _cardNumber, _expDateMonth, _expDateYear, _cvCode, _encryptedPayload, _endpoint, _referenceId, _provider;
     var _success, _error;
     var _state = WLPaymentRequestState.NEW;
 
@@ -43,6 +69,11 @@ var WLPaymentRequest = function () {
             _cardHolderName = n;
             return this
         },
+		storedUser: function(n) {
+			if ("provider" in n) _provider = n.provider;
+			if ("referenceId" in n) _referenceId = n.referenceId;
+			return this
+		},
         chdForm: function (document, tag) {
             if (tag && document && typeof document === 'object') {
                 var chdElements = document.querySelectorAll('['+tag+']');
@@ -68,6 +99,10 @@ var WLPaymentRequest = function () {
             if ("expDateMonth" in n) _expDateMonth = n.cardExpiryMonth;
             if ("expDateYear" in n) _expDateYear = n.cardExpiryYear;
             if ("cvCode" in n) _cvCode = n.cardCVC;
+            return this
+        },
+        referenceId: function (n) {
+            _referenceId = n;
             return this
         },
         cardNumber: function (n) {
@@ -100,7 +135,7 @@ var WLPaymentRequest = function () {
             return this
         },
         send: function () {
-            sendPayment(_success, _error, _encryptedPayload, _endpoint, _cardHolderName, _cardNumber, _expDateMonth, _expDateYear, _cvCode);
+            sendPayment(_success, _error, _encryptedPayload, _endpoint, _cardHolderName, _cardNumber, _expDateMonth, _expDateYear, _cvCode, _referenceId, _provider);
             return this
         }
     };
@@ -111,61 +146,143 @@ var WLPaymentRequest = function () {
         }
     });
 
-    function sendPayment(success, error, encryptedPayload, endpoint, cardHolderName, cardNumber, expDateMonth, expDateYear, cvCode) {
+    function sendPayment(success, error, encryptedPayload, endpoint, cardHolderName, cardNumber, expDateMonth, expDateYear, cvCode, referenceId, provider) {
 
-        var xhttp = new XMLHttpRequest();
-
-        var data = JSON.stringify({
+	 var data = JSON.stringify({
             cardHolderName: cardHolderName,
             cardNumber: cardNumber,
             expDateMonth: expDateMonth,
             expDateYear: expDateYear,
             cvCode: cvCode,
-            encryptedPayload: encryptedPayload
+            encryptedPayload: encryptedPayload,
+			referenceId: referenceId,
+			provider: provider
         });
+		
 
-        xhttp.open("POST", endpoint, true);
-        xhttp.timeout = 60000;
-        xhttp.setRequestHeader("Content-type", "application/json");
+	var xhttp = new XMLHttpRequest();
 
-        xhttp.onload = function () {
-            if (this.status >= 200 && this.status < 300) {
-                _state = WLPaymentRequestState.OK;
-                success(JSON.parse(xhttp.response));
-            } else if (this.status === 405) {
-                _state = WLPaymentRequestState.ERROR;
-                error({
-                    status: this.status,
-                    statusText: 'Please verify the Worldline Device API URL'
-                });
-            } else {
-                _state = WLPaymentRequestState.ERROR;
-                error({
-                    status: this.status,
-                    statusText: xhttp.statusText
-                });
-            }
-        };
-        xhttp.onerror = function () {
+    xhttp.open("POST", endpoint, true);
+    xhttp.timeout = 60000;
+    xhttp.setRequestHeader("Content-type", "application/json");
+
+    xhttp.onload = function () {
+        if (this.status >= 200 && this.status < 300) {
+            _state = WLPaymentRequestState.OK;
+            success(JSON.parse(xhttp.response));
+        } else if (this.status === 405) {
             _state = WLPaymentRequestState.ERROR;
             error({
                 status: this.status,
-                statusText: xhttp.statusText === '' ? 'Could not send transaction.' : xhttp.statusText
+                statusText: 'Please verify the Worldline Device API URL'
             });
-        };
-        xhttp.ontimeout = function () {
+        } else {
             _state = WLPaymentRequestState.ERROR;
             error({
                 status: this.status,
                 statusText: xhttp.statusText
             });
+        }
+    };
+    xhttp.onerror = function () {
+        _state = WLPaymentRequestState.ERROR;
+        error({
+            status: this.status,
+            statusText: xhttp.statusText === '' ? 'Could not send transaction.' : xhttp.statusText
+        });
+    };
+    xhttp.ontimeout = function () {
+        _state = WLPaymentRequestState.ERROR;
+        error({
+            status: this.status,
+            statusText: xhttp.statusText
+        });
 
-        };
+    };
 
-        _state = WLPaymentRequestState.SENT;
-        xhttp.send(data);
+    _state = WLPaymentRequestState.SENT;
+    xhttp.send(data);
     }
-
+	
     return _self;
 };
 
+
+var WLPaymentOptionsRequest = function () {
+	
+	var _encryptedPayload, _endpoint;
+	var _success, _error; 
+	var _state = WLPaymentRequestState.NEW;
+	var _self = {
+		deviceAPIRequest: function (n) {
+         _encryptedPayload = n.encryptedPayload;
+         _endpoint = n.deviceEndpoint;
+         return this
+       },
+       onSuccess: function (n) {
+           _success = n;
+           return this
+       },
+       onError: function (n) {
+           _error = n;
+           return this
+       },
+       send: function () {
+    	   sendRequest(_encryptedPayload, _endpoint, _success, _error);
+           return this
+       }}
+       
+	 Object.defineProperty(_self, "state", {
+	        get: function () {
+	            return _state;
+	        }
+	    });
+	
+	function sendRequest(encryptedPayload, endpoint, success, error) {
+		
+		var xhttp = new XMLHttpRequest();
+
+	    xhttp.open("GET", endpoint + "?encryptedPayload=" + encryptedPayload, true);
+	    xhttp.timeout = 60000;
+
+	    xhttp.onload = function () {
+	        if (this.status >= 200 && this.status < 300) {
+	            _state = WLPaymentRequestState.OK;
+	            success(JSON.parse(xhttp.response));
+	        } else if (this.status === 405) {
+	            _state = WLPaymentRequestState.ERROR;
+	            error({
+	                status: this.status,
+	                statusText: 'Please verify the Worldline Device API URL'
+	            });
+	        } else {
+	            _state = WLPaymentRequestState.ERROR;
+	            error({
+	                status: this.status,
+	                statusText: xhttp.statusText
+	            });
+	        }
+	    };
+	    xhttp.onerror = function () {
+	        _state = WLPaymentRequestState.ERROR;
+	        error({
+	            status: this.status,
+	            statusText: xhttp.statusText === '' ? 'Could not send transaction.' : xhttp.statusText
+	        });
+	    };
+	    xhttp.ontimeout = function () {
+	        _state = WLPaymentRequestState.ERROR;
+	        error({
+	            status: this.status,
+	            statusText: xhttp.statusText
+	        });
+
+	    };
+
+	    _state = WLPaymentRequestState.SENT;
+	    xhttp.send();
+	    }
+		
+	    return _self;
+	 
+}
