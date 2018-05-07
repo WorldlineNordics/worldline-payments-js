@@ -21,7 +21,7 @@
  *    
  * Usage for VisaCheckout:
  * var Request = new WLPaymentRequest()
- *      .referenceId(referenceId)
+ *      .storedUserReference(storedUserReference)
  *      .deviceAPIRequest(deviceAPIRequest)
  *      .onSuccess(callback)
  *      .onError(callback)
@@ -60,7 +60,7 @@ var WLPaymentRequestState = {
 };
 
 var WLPaymentRequest = function () {
-    var _cardHolderName, _cardNumber, _expDateMonth, _expDateYear, _cvCode, _encryptedPayload, _endpoint, _referenceId, _provider;
+    var _cardHolderName, _cardNumber, _expDateMonth, _expDateYear, _cvCode, _encryptedPayload, _endpoint, _storedUserReference, _provider;
     var _success, _error;
     var _state = WLPaymentRequestState.NEW;
 
@@ -71,7 +71,7 @@ var WLPaymentRequest = function () {
         },
 		storedUser: function(n) {
 			if ("provider" in n) _provider = n.provider;
-			if ("referenceId" in n) _referenceId = n.referenceId;
+			if ("storedUserReference" in n) _storedUserReference = n.storedUserReference;
 			return this
 		},
         chdForm: function (document, tag) {
@@ -101,8 +101,8 @@ var WLPaymentRequest = function () {
             if ("cvCode" in n) _cvCode = n.cardCVC;
             return this
         },
-        referenceId: function (n) {
-            _referenceId = n;
+        storedUserReference: function (n) {
+            _storedUserReference = n;
             return this
         },
         cardNumber: function (n) {
@@ -135,7 +135,7 @@ var WLPaymentRequest = function () {
             return this
         },
         send: function () {
-            sendPayment(_success, _error, _encryptedPayload, _endpoint, _cardHolderName, _cardNumber, _expDateMonth, _expDateYear, _cvCode, _referenceId, _provider);
+            sendPayment(_success, _error, _encryptedPayload, _endpoint, _cardHolderName, _cardNumber, _expDateMonth, _expDateYear, _cvCode, _storedUserReference, _provider);
             return this
         }
     };
@@ -146,7 +146,7 @@ var WLPaymentRequest = function () {
         }
     });
 
-    function sendPayment(success, error, encryptedPayload, endpoint, cardHolderName, cardNumber, expDateMonth, expDateYear, cvCode, referenceId, provider) {
+    function sendPayment(success, error, encryptedPayload, endpoint, cardHolderName, cardNumber, expDateMonth, expDateYear, cvCode, storedUserReference, provider) {
 
 	 var data = JSON.stringify({
             cardHolderName: cardHolderName,
@@ -155,7 +155,7 @@ var WLPaymentRequest = function () {
             expDateYear: expDateYear,
             cvCode: cvCode,
             encryptedPayload: encryptedPayload,
-			referenceId: referenceId,
+			storedUserReference: storedUserReference,
 			provider: provider
         });
 		
