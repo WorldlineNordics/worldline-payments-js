@@ -48,6 +48,35 @@ like this example illustrates:
             .onError(callback)
             .send()
 ```
+### Method 3: Referencing the ibp form
+
+```javascript
+var Request = new WLRedirectPaymentRequest()
+       .ibpForm(document.getElementById("online_banking_details"), 'data-ibp')
+       .deviceAPIRequest(deviceAPIRequest)
+       .onSuccess(callback)
+       .onError(callback)
+       .send();
+```
+Notes:
+ *  - The form has select list for banks.
+ *  - The deviceAPIRequest contains a JSON with paymentMethodId , encryptedPayload and deviceEndpoint.
+ *  - Callbacks for success and error. Error callback provides a JSON with status and statusText.
+ *    The success callback contains an encryptedResponse that requires decryption on server side.
+
+### Method 4: Fetching the payment methods 
+ ```javascript
+var Request = new WLPaymentMethodRequest()
+       .pmType(paymentMethodType)
+       .deviceAPIRequest(deviceAPIRequest)
+       .onSuccess(callback)
+       .onError(callback)
+       .send();
+```
+Notes:
+ *  The deviceAPIRequest contains a JSON with paymentMethodType , encryptedPayload and deviceEndpoint.
+ *  Callbacks for success and error. Error callback provides a JSON with status and statusText.
+ *  The success callback contains an encryptedResponse that requires decryption on server side.
 
 ### CORS properties
 

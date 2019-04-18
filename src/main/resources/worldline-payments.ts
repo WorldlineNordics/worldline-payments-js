@@ -91,16 +91,24 @@ var state = WLPaymentRequestState.NEW;
 class WLProcessRequest {
 	successFn:any;
 	errorFn:any;
+	protected encryptedPayload:string;
+	protected endpoint:string;
 	
 	onSuccess(success:Function){
 		this.successFn = success;
 		return this;
-	};
+	}
 
 	onError(error:Function){
 		this.errorFn=error;
 		return this;
-	};
+	}
+	
+	deviceAPIRequest(deviceAPIObj) {
+		this.encryptedPayload = deviceAPIObj.encryptedPayload;
+        this.endpoint = deviceAPIObj.deviceEndpoint;
+        return this;
+	}
 
 	sendPayment(endpoint:string,data:string,method:string){
 		var xhttp = new XMLHttpRequest();
@@ -161,19 +169,17 @@ class WLPaymentRequest extends WLProcessRequest{
  	expDateMonth:number;
  	expDateYear:number;
  	cvCode:number;
- 	encryptedPayload:string;
- 	endpoint:string;
  	storedUserRef:string;
  	provider:string;
 	method:string = "POST"
 
-	storedUser(n) {
-		if ("provider" in n) this.provider = n.provider;
-		if ("storedUserReference" in n) this.storedUserRef = n.storedUserReference;
+	storedUser(storeUserObj) {
+		if ("provider" in storeUserObj) this.provider = storeUserObj.provider;
+		if ("storedUserReference" in storeUserObj) this.storedUserRef = storeUserObj.storedUserRef;
 		return this
-	};
+	}
+
 	chdForm(document:Document,tag:string){
-	
 		var chdElements = document.querySelectorAll('['+tag+']');
         var chd = {};
         chdElements.forEach(function (x) {
@@ -188,25 +194,27 @@ class WLPaymentRequest extends WLProcessRequest{
         this.expDateYear = chd["cardExpiryYear"];
         this.cvCode = chd["cardCVC"];
         return this;
-	};
-	deviceAPIRequest(n) {
-		this.encryptedPayload = n.encryptedPayload;
-        this.endpoint = n.deviceEndpoint;
-        if(this.endpoint.indexOf("/api/v1/payments") > -1){
-        	return this;
-        }
-        else{
-        	this.endpoint = this.endpoint.concat("/api/v1/payments");
-          	return this;  
-        }
-	};
+	}
+	
+	card(cardObj) {
+        if ("cardNumber" in cardObj) this.cardNumber = cardObj.cardNumber;
+        if ("cardHolderName" in cardObj) this.cardHolderName = cardObj.cardHolderName;
+        if ("expDateMonth" in cardObj) this.expDateMonth = cardObj.cardExpiryMonth;
+        if ("expDateYear" in cardObj) this.expDateYear = cardObj.cardExpiryYear;
+        if ("cvCode" in cardObj) this.cvCode = cardObj.cardCVC;
+        return this
+    }
+	
 	storedUserReference(n) {
         this.storedUserRef = n;
         return this
-    };
+    }
 	
-
 	send(){
+		var endpointUrl = this.endpoint;
+		if(endpointUrl.indexOf("/api/v1/payments") <= -1){
+			endpointUrl = endpointUrl.concat("/api/v1/payments");
+	    }
 		var data = JSON.stringify({
 		   	cardHolderName: this.cardHolderName,
 		   	cardNumber: this.cardNumber,
@@ -217,74 +225,55 @@ class WLPaymentRequest extends WLProcessRequest{
 		    storedUserReference: this.storedUserRef,
 			provider: this.provider
 		});
-        super.sendPayment(this.endpoint,data,this.method);
+        super.sendPayment(endpointUrl,data,this.method);
         return this;
     }
 
 }
 
 class WLRedirectPaymentRequest extends WLProcessRequest{
-	encryptedPayload:string;
-	endpoint:string;
 	paymentMethodId:string;
 	method:string = "POST"
-
-	deviceAPIRequest(n) {
-		this.encryptedPayload = n.encryptedPayload;
-		this.endpoint = n.deviceEndpoint;
-		this.endpoint = this.endpoint.concat("/api/v1/redirectpayments");
-		return this;
-	};
 
 	ibpForm(document:Document,tag:string){
     	var el = document.querySelector('['+tag+']');
     	this.paymentMethodId =  (<HTMLInputElement>el).value;
     	return this;
-    };
-    
-	
+    }
 
 	send(){
+		var endpointUrl = this.endpoint.concat("/api/v1/redirectpayments");
 		var data = JSON.stringify({
 			paymentMethodId:this.paymentMethodId,
 			encryptedPayload:this.encryptedPayload
 		});
-		super.sendPayment(this.endpoint,data,this.method);
+		super.sendPayment(endpointUrl,data,this.method);
 		return this;
 	}
 }
 
 class WLPaymentMethodRequest extends WLProcessRequest{
-	encryptedPayload:string;
-	endpoint:string;
 	paymentMethodType:string;
 	method:string = "POST"
-	
-	deviceAPIRequest(n){
-    	this.encryptedPayload = n.encryptedPayload;
-    	this.endpoint = n.deviceEndpoint;
-    	this.endpoint = this.endpoint.concat("/api/v1/paymentmethods");
-    	return this;
-  	};
+
   	pmType(n){
   		this.paymentMethodType = n;
   		return this;
-  	};
+  	}
   	
 	send(){
+		var endpointUrl = this.endpoint.concat("/api/v1/paymentmethods");
 		var data = JSON.stringify({
       		paymentMethodType:this.paymentMethodType,
       		encryptedPayload:this.encryptedPayload
       	});
-		super.sendPayment(this.endpoint,data,this.method);
+		super.sendPayment(endpointUrl,data,this.method);
 		return this;
 	}
 	
 }
 
 class WLPaymentOptionsRequest extends WLProcessRequest{
-	encryptedPayload:string;
-	endpoint:string;
 	method:string = "GET"
 	
 	deviceAPIRequest(n) {
@@ -298,10 +287,17 @@ class WLPaymentOptionsRequest extends WLProcessRequest{
 			this.endpoint = this.endpoint.concat("/api/v1/paymentoptions?encryptedPayload=" + this.encryptedPayload);
 			return this;  
 		}
-	};
+	}
 	
 	send(){
-		super.sendPayment(this.endpoint,'',this.method);
+		var endpointUrl = this.endpoint;
+		if(endpointUrl.indexOf("/api/v1/paymentoptions") > -1){
+			endpointUrl = endpointUrl.concat("?encryptedPayload=" + this.encryptedPayload);
+		}
+		else{
+			endpointUrl = endpointUrl.concat("/api/v1/paymentoptions?encryptedPayload=" + this.encryptedPayload);
+		}
+		super.sendPayment(endpointUrl,'',this.method);
 		return this;
 	}
 }
