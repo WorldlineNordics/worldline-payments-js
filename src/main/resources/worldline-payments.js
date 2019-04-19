@@ -284,18 +284,6 @@ var WLPaymentOptionsRequest = /** @class */ (function (_super) {
         _this.method = "GET";
         return _this;
     }
-    WLPaymentOptionsRequest.prototype.deviceAPIRequest = function (n) {
-        this.encryptedPayload = n.encryptedPayload;
-        this.endpoint = n.deviceEndpoint;
-        if (this.endpoint.indexOf("/api/v1/paymentoptions") > -1) {
-            this.endpoint.concat("?encryptedPayload=" + this.encryptedPayload);
-            return this;
-        }
-        else {
-            this.endpoint = this.endpoint.concat("/api/v1/paymentoptions?encryptedPayload=" + this.encryptedPayload);
-            return this;
-        }
-    };
     WLPaymentOptionsRequest.prototype.send = function () {
         var endpointUrl = this.endpoint;
         if (endpointUrl.indexOf("/api/v1/paymentoptions") > -1) {
