@@ -10,3 +10,4 @@ buildSrcc
 releaseNotes.wiki
 .idea
 *.iml
+src/main/resources/node_modules/*
