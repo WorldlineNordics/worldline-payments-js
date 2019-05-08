@@ -273,6 +273,28 @@ class WLPaymentMethodRequest extends WLProcessRequest{
 	
 }
 
+class WLEftPaymentRequest extends WLProcessRequest{
+	paymentMethodId:string;
+	method:string = "POST"
+
+	eftForm(document:Document,tag:string){
+    	var el = document.querySelector('['+tag+']');
+    	this.paymentMethodId =  (<HTMLInputElement>el).value;
+    	return this;
+    }
+
+	send(){
+		var endpointUrl = this.endpoint.concat("/api/v1/eftpayments");
+		var data = JSON.stringify({
+			paymentMethodId:this.paymentMethodId,
+			encryptedPayload:this.encryptedPayload
+		});
+		super.sendPayment(endpointUrl,data,this.method);
+		return this;
+	}
+}
+
+
 class WLPaymentOptionsRequest extends WLProcessRequest{
 	method:string = "GET"
 	

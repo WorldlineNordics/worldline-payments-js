@@ -277,6 +277,29 @@ var WLPaymentMethodRequest = /** @class */ (function (_super) {
     };
     return WLPaymentMethodRequest;
 }(WLProcessRequest));
+var WLEftPaymentRequest = /** @class */ (function (_super) {
+    __extends(WLEftPaymentRequest, _super);
+    function WLEftPaymentRequest() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.method = "POST";
+        return _this;
+    }
+    WLEftPaymentRequest.prototype.eftForm = function (document, tag) {
+        var el = document.querySelector('[' + tag + ']');
+        this.paymentMethodId = el.value;
+        return this;
+    };
+    WLEftPaymentRequest.prototype.send = function () {
+        var endpointUrl = this.endpoint.concat("/api/v1/eftpayments");
+        var data = JSON.stringify({
+            paymentMethodId: this.paymentMethodId,
+            encryptedPayload: this.encryptedPayload
+        });
+        _super.prototype.sendPayment.call(this, endpointUrl, data, this.method);
+        return this;
+    };
+    return WLEftPaymentRequest;
+}(WLProcessRequest));
 var WLPaymentOptionsRequest = /** @class */ (function (_super) {
     __extends(WLPaymentOptionsRequest, _super);
     function WLPaymentOptionsRequest() {
