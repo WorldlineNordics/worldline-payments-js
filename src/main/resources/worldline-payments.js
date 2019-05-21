@@ -46,8 +46,31 @@
  *
  *
  * Usage:
+ In case of IBP
  * var Request = new WLRedirectPaymentRequest()
- *      .ibpForm(document.getElementById("online_banking_details"), 'data-ibp')
+ *      .redirectForm(document.getElementById("online_banking_details"), 'data-ibp')
+ *      .deviceAPIRequest(deviceAPIRequest)
+ *      .onSuccess(callback)
+ *      .onError(callback)
+ *      .send();
+ 
+ In case of eWallet
+ * var Request = new WLRedirectPaymentRequest()
+ *      .redirectForm(document.getElementById("ewallet_details"), 'data-ewallet')
+ *      .deviceAPIRequest(deviceAPIRequest)
+ *      .onSuccess(callback)
+ *      .onError(callback)
+ *      .send();
+ *
+ *  Where
+ *  - The form has select list for banks.
+ *  - The deviceAPIRequest contains a JSON with paymentMethodId , encryptedPayload and deviceEndpoint.
+ *  - Callbacks for success and error. Error callback provides a JSON with status and statusText.
+ *    The success callback contains an encryptedResponse that requires decryption on server side.
+ *
+ *	Usage
+ * var Request = new WLEftPaymentRequest()
+ *      .redirectForm(document.getElementById("ewallet_details"), 'data-ewallet')
  *      .deviceAPIRequest(deviceAPIRequest)
  *      .onSuccess(callback)
  *      .onError(callback)
@@ -239,7 +262,7 @@ var WLRedirectPaymentRequest = /** @class */ (function (_super) {
         _this.method = "POST";
         return _this;
     }
-    WLRedirectPaymentRequest.prototype.ibpForm = function (document, tag) {
+    WLRedirectPaymentRequest.prototype.redirectForm = function (document, tag) {
         var el = document.querySelector('[' + tag + ']');
         this.paymentMethodId = el.value;
         return this;
@@ -254,28 +277,6 @@ var WLRedirectPaymentRequest = /** @class */ (function (_super) {
         return this;
     };
     return WLRedirectPaymentRequest;
-}(WLProcessRequest));
-var WLPaymentMethodRequest = /** @class */ (function (_super) {
-    __extends(WLPaymentMethodRequest, _super);
-    function WLPaymentMethodRequest() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.method = "POST";
-        return _this;
-    }
-    WLPaymentMethodRequest.prototype.pmType = function (n) {
-        this.paymentMethodType = n;
-        return this;
-    };
-    WLPaymentMethodRequest.prototype.send = function () {
-        var endpointUrl = this.endpoint.concat("/api/v1/paymentmethods");
-        var data = JSON.stringify({
-            paymentMethodType: this.paymentMethodType,
-            encryptedPayload: this.encryptedPayload
-        });
-        _super.prototype.sendPayment.call(this, endpointUrl, data, this.method);
-        return this;
-    };
-    return WLPaymentMethodRequest;
 }(WLProcessRequest));
 var WLEftPaymentRequest = /** @class */ (function (_super) {
     __extends(WLEftPaymentRequest, _super);
@@ -299,6 +300,28 @@ var WLEftPaymentRequest = /** @class */ (function (_super) {
         return this;
     };
     return WLEftPaymentRequest;
+}(WLProcessRequest));
+var WLPaymentMethodRequest = /** @class */ (function (_super) {
+    __extends(WLPaymentMethodRequest, _super);
+    function WLPaymentMethodRequest() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.method = "POST";
+        return _this;
+    }
+    WLPaymentMethodRequest.prototype.pmType = function (n) {
+        this.paymentMethodType = n;
+        return this;
+    };
+    WLPaymentMethodRequest.prototype.send = function () {
+        var endpointUrl = this.endpoint.concat("/api/v1/paymentmethods");
+        var data = JSON.stringify({
+            paymentMethodType: this.paymentMethodType,
+            encryptedPayload: this.encryptedPayload
+        });
+        _super.prototype.sendPayment.call(this, endpointUrl, data, this.method);
+        return this;
+    };
+    return WLPaymentMethodRequest;
 }(WLProcessRequest));
 var WLPaymentOptionsRequest = /** @class */ (function (_super) {
     __extends(WLPaymentOptionsRequest, _super);

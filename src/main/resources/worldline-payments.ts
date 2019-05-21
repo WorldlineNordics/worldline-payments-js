@@ -46,8 +46,31 @@
  * 
  * 
  * Usage:
+ In case of IBP
  * var Request = new WLRedirectPaymentRequest()
- *      .ibpForm(document.getElementById("online_banking_details"), 'data-ibp')
+ *      .redirectForm(document.getElementById("online_banking_details"), 'data-ibp')
+ *      .deviceAPIRequest(deviceAPIRequest)
+ *      .onSuccess(callback)
+ *      .onError(callback)
+ *      .send();
+ 
+ In case of eWallet
+ * var Request = new WLRedirectPaymentRequest()
+ *      .redirectForm(document.getElementById("ewallet_details"), 'data-ewallet')
+ *      .deviceAPIRequest(deviceAPIRequest)
+ *      .onSuccess(callback)
+ *      .onError(callback)
+ *      .send();
+ *      
+ *  Where
+ *  - The form has select list for banks.
+ *  - The deviceAPIRequest contains a JSON with paymentMethodId , encryptedPayload and deviceEndpoint.
+ *  - Callbacks for success and error. Error callback provides a JSON with status and statusText.
+ *    The success callback contains an encryptedResponse that requires decryption on server side.
+ *  
+ *	Usage  
+ * var Request = new WLEftPaymentRequest()
+ *      .redirectForm(document.getElementById("ewallet_details"), 'data-ewallet')
  *      .deviceAPIRequest(deviceAPIRequest)
  *      .onSuccess(callback)
  *      .onError(callback)
@@ -235,7 +258,7 @@ class WLRedirectPaymentRequest extends WLProcessRequest{
 	paymentMethodId:string;
 	method:string = "POST"
 
-	ibpForm(document:Document,tag:string){
+	redirectForm(document:Document,tag:string){
     	var el = document.querySelector('['+tag+']');
     	this.paymentMethodId =  (<HTMLInputElement>el).value;
     	return this;
@@ -243,6 +266,27 @@ class WLRedirectPaymentRequest extends WLProcessRequest{
 
 	send(){
 		var endpointUrl = this.endpoint.concat("/api/v1/redirectpayments");
+		var data = JSON.stringify({
+			paymentMethodId:this.paymentMethodId,
+			encryptedPayload:this.encryptedPayload
+		});
+		super.sendPayment(endpointUrl,data,this.method);
+		return this;
+	}
+}
+
+class WLEftPaymentRequest extends WLProcessRequest{
+	paymentMethodId:string;
+	method:string = "POST"
+
+	eftForm(document:Document,tag:string){
+    	var el = document.querySelector('['+tag+']');
+    	this.paymentMethodId =  (<HTMLInputElement>el).value;
+    	return this;
+    }
+
+	send(){
+		var endpointUrl = this.endpoint.concat("/api/v1/eftpayments");
 		var data = JSON.stringify({
 			paymentMethodId:this.paymentMethodId,
 			encryptedPayload:this.encryptedPayload
@@ -272,28 +316,6 @@ class WLPaymentMethodRequest extends WLProcessRequest{
 	}
 	
 }
-
-class WLEftPaymentRequest extends WLProcessRequest{
-	paymentMethodId:string;
-	method:string = "POST"
-
-	eftForm(document:Document,tag:string){
-    	var el = document.querySelector('['+tag+']');
-    	this.paymentMethodId =  (<HTMLInputElement>el).value;
-    	return this;
-    }
-
-	send(){
-		var endpointUrl = this.endpoint.concat("/api/v1/eftpayments");
-		var data = JSON.stringify({
-			paymentMethodId:this.paymentMethodId,
-			encryptedPayload:this.encryptedPayload
-		});
-		super.sendPayment(endpointUrl,data,this.method);
-		return this;
-	}
-}
-
 
 class WLPaymentOptionsRequest extends WLProcessRequest{
 	method:string = "GET"
