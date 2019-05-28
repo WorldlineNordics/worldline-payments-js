@@ -1,6 +1,6 @@
 {
   "name": "worldline-payments-js",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "main": "worldline-payments.js",
   "description": "Client side payment processing with Worldline Online Payments.",
   "repository": "https://github.com/WorldlineNordics/worldline-payments-js",
