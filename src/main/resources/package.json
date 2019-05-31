@@ -5,11 +5,14 @@
   "description": "Client side payment processing with Worldline Online Payments.",
   "repository": "https://github.com/WorldlineNordics/worldline-payments-js",
   "dependencies": {
+    "ts-loader": "^6.0.2",
+    "tsconfig-paths": "^3.8.0",
     "typescript": "^3.4.3",
     "webpack": "^4.30.0"
   },
   "scripts": {
-    "test": ""
+    "build": "webpack -p",
+    "test": "tsc test"
   },
   "keywords": [
     "payments",
@@ -19,5 +22,8 @@
     "debit card"
   ],
   "author": "Worldline Sweden AB",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "webpack-cli": "^3.3.2"
+  }
 }
