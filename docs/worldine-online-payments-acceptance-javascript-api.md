@@ -48,15 +48,33 @@ like this example illustrates:
             .onError(callback)
             .send()
 ```
-### Method 3: Referencing the ibp form
+### Method 3: Referencing the payment form
 
 ```javascript
-var Request = new WLRedirectPaymentRequest()
-       .ibpForm(document.getElementById("online_banking_details"), 'data-ibp')
+
+In case of IBP
+var Request = new WLAlternatePaymentRequest()
+       .paymentForm(document.getElementById("online_banking_details"), 'data-ibp')
        .deviceAPIRequest(deviceAPIRequest)
        .onSuccess(callback)
        .onError(callback)
-       .send();
+       .send(paymentMethodType);
+       
+In case of eWallet
+var Request = new WLAlternatePaymentRequest()
+       .paymentForm(document.getElementById("ewallet_details"), 'data-ewallet')
+       .deviceAPIRequest(deviceAPIRequest)
+       .onSuccess(callback)
+       .onError(callback)
+       .send(paymentMethodType);
+       
+In case of EFT
+var Request = new WLAlternatePaymentRequest()
+       .paymentForm(document.getElementById("eft_details"), 'data-eft')
+       .deviceAPIRequest(deviceAPIRequest)
+       .onSuccess(callback)
+       .onError(callback)
+       .send(paymentMethodType);
 ```
 Notes:
  *  - The form has select list for banks.
