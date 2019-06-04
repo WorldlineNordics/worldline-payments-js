@@ -1,10 +1,10 @@
-const path = require('path');
-
 module.exports = {
-    entry: path.join(__dirname, '/src/worldline-payments.ts'),
+   entry: {app: ['./src/worldline-payments.ts']},
     output: {
         filename: 'worldline-payments.js',
-        path: __dirname
+        path: __dirname,
+        libraryTarget: 'var',
+        library: 'Worldline'
     },
     module: {
         rules: [
@@ -17,4 +17,7 @@ module.exports = {
     resolve: {
         extensions: [".ts", ".js"]
     },
+    optimization: {
+		minimize: false
+	}
 };

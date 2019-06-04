@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="worldline-payments.js" type="text/javascript"> </script>
+</head>
+<body>
+    <script type="text/javascript">
+     console.log(new Worldline.WLAlternatePaymentRequest().onError(function() { console.log('error'); }));
+     console.log(new Worldline.WLAlternatePaymentRequest().send);
+    </script>
+</body>
+</html>
