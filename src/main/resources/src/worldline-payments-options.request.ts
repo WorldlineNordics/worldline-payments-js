@@ -1,6 +1,6 @@
-import { WLProcessRequest } from "./worldline-payments-process.request";
+import { ProcessRequest } from "./worldline-payments-process.request";
 
-export class WLPaymentOptionsRequest extends WLProcessRequest{
+export class PaymentOptionsRequest extends ProcessRequest{
 	method:string = "GET"
 	
 	send(){

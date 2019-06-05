@@ -1,5 +1,5 @@
-import { WLProcessRequest } from "./worldline-payments-process.request";
-export class WLAlternatePaymentRequest extends WLProcessRequest{
+import { ProcessRequest } from "./worldline-payments-process.request";
+export class AlternatePaymentRequest extends ProcessRequest{
 	paymentMethodId:string;
 	method:string = "POST"
 

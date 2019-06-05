@@ -1,4 +1,4 @@
-var WLPaymentRequestState = {
+var PaymentRequestState = {
     NEW: 1,
     SENT: 2,
     OK: 3,
@@ -11,9 +11,9 @@ var WLPaymentRequestState = {
     }
 };
 
-var state = WLPaymentRequestState.NEW;
+var state = PaymentRequestState.NEW;
 
-export class WLProcessRequest {
+export class ProcessRequest {
 	successFn:any;
 	errorFn:any;
 	protected encryptedPayload:string;
@@ -43,17 +43,17 @@ export class WLProcessRequest {
 		var worldlineRequest = this;
 		xhttp.onload = function () {
 			if (this.status >= 200 && this.status < 300) {
-	            state = WLPaymentRequestState.OK;
+	            state = PaymentRequestState.OK;
 	            worldlineRequest.successFn(JSON.parse(xhttp.response));
 	        }
 			else if (this.status === 405) {
-	            state = WLPaymentRequestState.ERROR;
+	            state = PaymentRequestState.ERROR;
 	            worldlineRequest.errorFn({
 	                status: this.status,
 	                statusText: 'Please verify the Worldline Device API URL'
 	            });
 	        } else {
-	            state = WLPaymentRequestState.ERROR;
+	            state = PaymentRequestState.ERROR;
 	            worldlineRequest.errorFn({
 	                status: this.status,
 	                statusText: xhttp.statusText
@@ -62,14 +62,14 @@ export class WLProcessRequest {
 		};
 		
 		xhttp.onerror = function () {
-			state = WLPaymentRequestState.ERROR;
+			state = PaymentRequestState.ERROR;
 			worldlineRequest.errorFn({
 	            status: this.status,
 	            statusText: xhttp.statusText === '' ? 'Could not send transaction.' : xhttp.statusText
 	        });
 	    };
 	    xhttp.ontimeout = function () {
-	        state = WLPaymentRequestState.ERROR;
+	        state = PaymentRequestState.ERROR;
 	        worldlineRequest.errorFn({
 	            status: this.status,
 	            statusText: xhttp.statusText
@@ -77,7 +77,7 @@ export class WLProcessRequest {
 
 	    };
 	    
-	    state = WLPaymentRequestState.SENT;
+	    state = PaymentRequestState.SENT;
 	    if(method === "POST"){
 	    	xhttp.send(data);
 	    }
