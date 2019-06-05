@@ -6,10 +6,4 @@
  import { PaymentRequest } from "./worldline-payments.request";
 
 
- module.exports = {
-	AlternatePaymentRequest: AlternatePaymentRequest,
-	PaymentOptionsRequest: PaymentOptionsRequest,
-	PaymentMethodRequest: PaymentMethodRequest,
-	ProcessRequest: ProcessRequest,
-	PaymentRequest:PaymentRequest
- };
+ module.exports = { AlternatePaymentRequest, PaymentOptionsRequest, PaymentMethodRequest, ProcessRequest, PaymentRequest }

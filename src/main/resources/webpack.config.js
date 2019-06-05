@@ -1,4 +1,3 @@
-const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     entry: './src/worldline-payments.ts',
@@ -19,13 +18,4 @@ module.exports = {
     resolve: {
         extensions: [".ts", ".js"]
     },
-    optimization: {
-        concatenateModules: false,
-        minimizer: [new TerserPlugin ({
-                            terserOptions: {
-                                keep_classnames: true,
-                                keep_fnames: true
-                            }
-                     })]
-    }
 };
