@@ -8,7 +8,7 @@ export class PaymentRequest extends ProcessRequest {
  	cvCode:number;
  	storedUserRef:string;
  	provider:string;
-	method:string = "POST"
+	method:string = "POST";
 
 	storedUser(storeUserObj) {
 		if ("provider" in storeUserObj) this.provider = storeUserObj.provider;
