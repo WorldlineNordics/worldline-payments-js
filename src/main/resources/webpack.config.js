@@ -1,6 +1,6 @@
 
 module.exports = {
-    entry: './src/worldline-payments.ts',
+    entry: './src/Payments.ts',
     output: {
         filename: 'worldline-payments.js',
         path: __dirname,
