@@ -1,17 +1,17 @@
 import { ProcessRequest } from "./ProcessRequest";
+import { paymentConstants } from "./PaymentConstants";
 
-export class PaymentOptionsRequest extends ProcessRequest{
-	method:string = "GET"
-	
-	send(){
-		var endpointUrl = this.endpoint;
-		if(endpointUrl.indexOf("/api/v1/paymentoptions") > -1){
-			endpointUrl = endpointUrl.concat("?encryptedPayload=" + this.encryptedPayload);
-		}
-		else{
-			endpointUrl = endpointUrl.concat("/api/v1/paymentoptions?encryptedPayload=" + this.encryptedPayload);
-		}
-		super.sendPayment(endpointUrl,'',this.method);
-		return this;
-	}
+export class PaymentOptionsRequest extends ProcessRequest {
+  method: string = "GET";
+
+  send() {
+    let url = "?encryptedPayload=" + this.encryptedPayload;
+    const hasApiUrl =
+      this.endpoint.indexOf(paymentConstants.paymentOptionApi) > -1;
+    const endpointUrl = hasApiUrl
+      ? url
+      : paymentConstants.paymentOptionApi + url;
+    super.sendPayment(endpointUrl, "", this.method);
+    return this;
+  }
 }
