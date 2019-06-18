@@ -1,6 +1,9 @@
 jest.mock("../PaymentMethodRequest");
 import { PaymentMethodRequest } from "../PaymentMethodRequest";
-import { paymentMethodResponse, sendPaymentResponse } from "./MockResponseConstants";
+import {
+  paymentMethodResponse,
+  sendPaymentResponse
+} from "./MockResponseConstants";
 const paymentMethodObj = new PaymentMethodRequest();
 let data;
 
