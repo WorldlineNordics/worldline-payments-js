@@ -8,7 +8,7 @@ There are two methods for calling on the API for processing with the Device Paym
 
 ### Method 1: Referencing the payment form  
 ```javascript
- var request = new WLPaymentRequest()
+ var request = new PaymentRequest()
       .chdForm(document.getElementById("paymentForm"), 'data-chd')
       .deviceAPIRequest(deviceAPIRequest)
       .onSuccess(callback)
@@ -35,7 +35,7 @@ An alternate integration method, that supports a card objecet is also possible,
 like this example illustrates:
 
 ```javascript
-        new WLPaymentRequest()
+        new PaymentRequest()
             .card({
                 cardHolderName: "Carl Larsson",
                 cardNumber: "1234567890123456",
@@ -48,15 +48,33 @@ like this example illustrates:
             .onError(callback)
             .send()
 ```
-### Method 3: Referencing the ibp form
+### Method 3: Referencing the payment form
 
 ```javascript
-var Request = new WLRedirectPaymentRequest()
-       .ibpForm(document.getElementById("online_banking_details"), 'data-ibp')
+
+In case of IBP
+var Request = new AlternatePaymentRequest()
+       .paymentForm(document.getElementById("online_banking_details"), 'data-ibp')
        .deviceAPIRequest(deviceAPIRequest)
        .onSuccess(callback)
        .onError(callback)
-       .send();
+       .send(paymentMethodType);
+       
+In case of eWallet
+var Request = new AlternatePaymentRequest()
+       .paymentForm(document.getElementById("ewallet_details"), 'data-ewallet')
+       .deviceAPIRequest(deviceAPIRequest)
+       .onSuccess(callback)
+       .onError(callback)
+       .send(paymentMethodType);
+       
+In case of EFT
+var Request = new AlternatePaymentRequest()
+       .paymentForm(document.getElementById("eft_details"), 'data-eft')
+       .deviceAPIRequest(deviceAPIRequest)
+       .onSuccess(callback)
+       .onError(callback)
+       .send(paymentMethodType);
 ```
 Notes:
  *  - The form has select list for banks.
@@ -66,7 +84,7 @@ Notes:
 
 ### Method 4: Fetching the payment methods 
  ```javascript
-var Request = new WLPaymentMethodRequest()
+var Request = new PaymentMethodRequest()
        .pmType(paymentMethodType)
        .deviceAPIRequest(deviceAPIRequest)
        .onSuccess(callback)
