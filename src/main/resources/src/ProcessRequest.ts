@@ -1,8 +1,8 @@
 const PaymentRequestState = {
-  NEW: 1,
-  SENT: 2,
-  OK: 3,
   ERROR: 4,
+  NEW: 1,
+  OK: 3,
+  SENT: 2,
   properties: {
     1: { name: "NEW", value: 1 },
     2: { name: "SENT", value: 2 },
@@ -14,33 +14,33 @@ const PaymentRequestState = {
 let state = PaymentRequestState.NEW;
 
 export class ProcessRequest {
-  successFn: any;
-  errorFn: any;
-  encryptedPayload: string;
-  endpoint: string;
+  public successFn: any;
+  public errorFn: any;
+  public encryptedPayload: string;
+  public endpoint: string;
 
-  onSuccess(success: Function) {
+  public onSuccess(success: any) {
     this.successFn = success;
     return this;
   }
 
-  onError(error: Function) {
+  public onError(error: any) {
     this.errorFn = error;
     return this;
   }
 
-  deviceAPIRequest(deviceAPIObj) {
+  public deviceAPIRequest(deviceAPIObj) {
     this.encryptedPayload = deviceAPIObj.encryptedPayload;
     this.endpoint = deviceAPIObj.deviceEndpoint;
     return this;
   }
 
-  sendPayment(endpoint: string, data: string, method: string) {
-    let xhttp = new XMLHttpRequest();
+  public sendPayment(endpoint: string, data: string, method: string) {
+    const xhttp = new XMLHttpRequest();
     xhttp.open(method, endpoint, true);
     xhttp.timeout = 60000;
     xhttp.setRequestHeader("Content-type", "application/json");
-    let worldlineRequest = this;
+    const worldlineRequest = this;
     xhttp.onload = function() {
       if (this.status >= 200 && this.status < 300) {
         state = PaymentRequestState.OK;

@@ -1,25 +1,25 @@
-import { ProcessRequest } from "./ProcessRequest";
 import { paymentConstants } from "./PaymentConstants";
+import { ProcessRequest } from "./ProcessRequest";
 export class AlternatePaymentRequest extends ProcessRequest {
-  paymentMethodId: string;
-  method: string = "POST";
+  public paymentMethodId: string;
+  public method: string = "POST";
 
-  paymentForm(document: Document, tag: string) {
+  public paymentForm(document: Document, tag: string) {
     const el = document.querySelector("[" + tag + "]");
-    this.paymentMethodId = (<HTMLInputElement>el).value;
+    this.paymentMethodId = (el as HTMLInputElement).value;
     return this;
   }
 
-  send(paymentMethodType) {
+  public send(paymentMethodType) {
     let endpointUrl;
     if (paymentMethodType === "ibp" || paymentMethodType === "ewallet") {
       endpointUrl = this.endpoint.concat(paymentConstants.redirectApi);
     } else if (paymentMethodType === "eft") {
       endpointUrl = this.endpoint.concat(paymentConstants.eftApi);
     }
-    let data = JSON.stringify({
-      paymentMethodId: this.paymentMethodId,
-      encryptedPayload: this.encryptedPayload
+    const data = JSON.stringify({
+      encryptedPayload: this.encryptedPayload,
+      paymentMethodId: this.paymentMethodId
     });
     super.sendPayment(endpointUrl, data, this.method);
     return this;

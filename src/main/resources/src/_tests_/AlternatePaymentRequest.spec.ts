@@ -12,7 +12,7 @@ const alternatePayment = new AlternatePaymentRequest();
 let data;
 
 test("send method of eft", () => {
-  let result = alternatePayment.send("eft");
+  const result = alternatePayment.send("eft");
   expect(result).toEqual(eftResponse);
   alternatePayment.method = result.method;
   alternatePayment.paymentMethodId = result.paymentMethodId;
@@ -21,7 +21,7 @@ test("send method of eft", () => {
 });
 
 test("send method of ibp", () => {
-  let result = alternatePayment.send("ibp");
+  const result = alternatePayment.send("ibp");
   expect(result).toEqual(ibpResponse);
   alternatePayment.method = result.method;
   alternatePayment.paymentMethodId = result.paymentMethodId;
@@ -30,20 +30,20 @@ test("send method of ibp", () => {
 });
 
 test("send method of ewallet", () => {
-  let result = alternatePayment.send("ewallet");
+  const result = alternatePayment.send("ewallet");
   expect(result).toEqual(ewalletResponse);
   alternatePayment.method = result.method;
   alternatePayment.paymentMethodId = result.paymentMethodId;
   alternatePayment.encryptedPayload = result.encryptedPayload;
   alternatePayment.endpoint = result.endpoint;
   data = JSON.stringify({
-    paymentMethodId: alternatePayment.paymentMethodId,
-    encryptedPayload: alternatePayment.encryptedPayload
+    encryptedPayload: alternatePayment.encryptedPayload,
+    paymentMethodId: alternatePayment.paymentMethodId
   });
 });
 
 test("sendPayment method of alternate payment method", () => {
-  let response = alternatePayment.sendPayment(
+  const response = alternatePayment.sendPayment(
     alternatePayment.endpoint,
     data,
     alternatePayment.method

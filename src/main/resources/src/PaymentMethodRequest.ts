@@ -1,19 +1,19 @@
 import { paymentConstants } from "./PaymentConstants";
 import { ProcessRequest } from "./ProcessRequest";
 export class PaymentMethodRequest extends ProcessRequest {
-  paymentMethodType: string;
-  method: string = "POST";
+  public paymentMethodType: string;
+  public method: string = "POST";
 
-  pmType(n) {
+  public pmType(n) {
     this.paymentMethodType = n;
     return this;
   }
 
-  send() {
+  public send() {
     const endpointUrl = this.endpoint.concat(paymentConstants.paymentMethodApi);
-    let data = JSON.stringify({
-      paymentMethodType: this.paymentMethodType,
-      encryptedPayload: this.encryptedPayload
+    const data = JSON.stringify({
+      encryptedPayload: this.encryptedPayload,
+      paymentMethodType: this.paymentMethodType
     });
     super.sendPayment(endpointUrl, data, this.method);
     return this;
