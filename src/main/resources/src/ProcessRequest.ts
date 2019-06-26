@@ -18,6 +18,7 @@ export class ProcessRequest {
   public errorFn: any;
   public encryptedPayload: string;
   public endpoint: string;
+  public timeout: number;
 
   public onSuccess(success: any) {
     this.successFn = success;
