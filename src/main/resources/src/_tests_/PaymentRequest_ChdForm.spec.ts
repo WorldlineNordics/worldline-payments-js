@@ -1,5 +1,5 @@
 import { PaymentRequest } from "../PaymentRequest";
-import { doc, chdFormResponse } from "./MockResponseConstants";
+import { chdFormResponse, doc } from "./MockResponseConstants";
 const paymentObj = new PaymentRequest();
 const tag = "data-chd";
 

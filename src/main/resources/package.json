@@ -4,16 +4,13 @@
   "main": "worldline-payments.js",
   "description": "Client side payment processing with Worldline Online Payments.",
   "repository": "https://github.com/WorldlineNordics/worldline-payments-js",
-  "dependencies": {
-    "@types/node": "^12.0.4",
-    "ts-loader": "^6.0.2",
-    "tsconfig-paths": "^3.8.0",
-    "typescript": "^3.4.3",
-    "webpack": "^4.30.0"
-  },
+  "dependencies": {},
   "scripts": {
     "build": "webpack -p",
-    "test": "jest"
+    "test": "jest",
+    "tslint-check": "tslint-config-prettier-check ./tslint.json",
+    "verify": "yarn test && yarn lint",
+    "lint": "tslint --project \".\""
   },
   "keywords": [
     "payments",
@@ -26,8 +23,16 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/jest": "^24.0.13",
+    "@types/node": "^12.0.10",
     "jest": "^24.8.0",
     "ts-jest": "^24.0.2",
+    "ts-loader": "^6.0.4",
+    "tsconfig-paths": "^3.8.0",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.5.2",
+    "typescript-tslint-plugin": "^0.5.2",
+    "webpack": "^4.35.0",
     "webpack-cli": "^3.3.2"
   },
   "jest": {

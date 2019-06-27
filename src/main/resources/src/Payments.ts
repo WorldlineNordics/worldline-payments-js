@@ -1,13 +1,13 @@
 import { AlternatePaymentRequest } from "./AlternatePaymentRequest";
-import { PaymentOptionsRequest } from "./PaymentOptionsRequest";
 import { PaymentMethodRequest } from "./PaymentMethodRequest";
-import { ProcessRequest } from "./ProcessRequest";
+import { PaymentOptionsRequest } from "./PaymentOptionsRequest";
 import { PaymentRequest } from "./PaymentRequest";
+import { ProcessRequest } from "./ProcessRequest";
 
 module.exports = {
   AlternatePaymentRequest,
-  PaymentOptionsRequest,
   PaymentMethodRequest,
-  ProcessRequest,
-  PaymentRequest
+  PaymentOptionsRequest,
+  PaymentRequest,
+  ProcessRequest
 };

@@ -7,7 +7,7 @@ const endpointUrl = "/api/v1/payments";
 let data;
 
 test("send method of card", () => {
-  let result = paymentObj.send();
+  const result = paymentObj.send();
   expect(result).toEqual(cardResponse);
   paymentObj.method = result.method;
   paymentObj.cardHolderName = result.cardHolderName;
@@ -19,14 +19,14 @@ test("send method of card", () => {
   data = JSON.stringify({
     cardHolderName: paymentObj.cardHolderName,
     cardNumber: paymentObj.cardNumber,
-    expDateMonth: paymentObj.expDateMonth,
-    expDateYear: paymentObj.expDateYear,
     cvCode: paymentObj.cvCode,
-    encryptedPayload: paymentObj.encryptedPayload
+    encryptedPayload: paymentObj.encryptedPayload,
+    expDateMonth: paymentObj.expDateMonth,
+    expDateYear: paymentObj.expDateYear
   });
 });
 
 test("sendPayment method of card", () => {
-  let response = paymentObj.sendPayment(endpointUrl, data, paymentObj.method);
+  const response = paymentObj.sendPayment(endpointUrl, data, paymentObj.method);
   expect(response).toEqual(sendPaymentResponse);
 });

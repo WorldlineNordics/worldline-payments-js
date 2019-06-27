@@ -8,20 +8,20 @@ const paymentMethodObj = new PaymentMethodRequest();
 let data;
 
 test("send method of PaymentMethodRequest to fetch  payment method of ibp", () => {
-  let result = paymentMethodObj.send();
+  const result = paymentMethodObj.send();
   expect(result).toEqual(paymentMethodResponse);
   paymentMethodObj.method = result.method;
   paymentMethodObj.endpoint = result.endpoint;
   paymentMethodObj.paymentMethodType = result.paymentMethodType;
   paymentMethodObj.encryptedPayload = result.encryptedPayload;
   data = JSON.stringify({
-    paymentMethodType: paymentMethodObj.paymentMethodType,
-    encryptedPayload: paymentMethodObj.encryptedPayload
+    encryptedPayload: paymentMethodObj.encryptedPayload,
+    paymentMethodType: paymentMethodObj.paymentMethodType
   });
 });
 
 test("sendPayment method of PaymentMethodRequest", () => {
-  let response = paymentMethodObj.sendPayment(
+  const response = paymentMethodObj.sendPayment(
     paymentMethodObj.endpoint,
     data,
     paymentMethodObj.method
