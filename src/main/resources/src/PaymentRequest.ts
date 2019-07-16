@@ -59,10 +59,14 @@ export class PaymentRequest extends ProcessRequest {
     return this;
   }
 
-  public send() {
+  public send(key) {
     let endpointUrl = this.endpoint;
-    if (endpointUrl.indexOf(paymentConstants.cardApi) === -1) {
-      endpointUrl = endpointUrl.concat(paymentConstants.cardApi);
+    if (key === "initAuth") {
+      endpointUrl = endpointUrl.concat(paymentConstants.initAuthCardApi);
+    } else if (key === "continueAuth") {
+      endpointUrl = endpointUrl.concat(paymentConstants.continueAuthCardApi);
+    } else if (key === "payment") {
+      endpointUrl = endpointUrl.concat(paymentConstants.completeCardApi);
     }
     const data = JSON.stringify({
       cardHolderName: this.cardHolderName,

@@ -5,9 +5,10 @@ import { cardResponse, sendPaymentResponse } from "./MockResponseConstants";
 const paymentObj = new PaymentRequest();
 const endpointUrl = "/api/v1/payments";
 let data;
+const key = "payment";
 
 test("send method of card", () => {
-  const result = paymentObj.send();
+  const result = paymentObj.send(key);
   expect(result).toEqual(cardResponse);
   paymentObj.method = result.method;
   paymentObj.cardHolderName = result.cardHolderName;

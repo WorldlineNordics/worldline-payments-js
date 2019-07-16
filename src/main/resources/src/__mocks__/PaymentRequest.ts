@@ -1,6 +1,6 @@
 import { ProcessRequest } from "./ProcessRequest";
 export class PaymentRequest extends ProcessRequest {
-  public send() {
+  public send(key: string) {
     return {
       cardHolderName: "John",
       cardNumber: "4444333322221111",
