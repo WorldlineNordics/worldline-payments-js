@@ -1,5 +1,5 @@
 export const paymentConstants = {
-  completeCardApi: "/api/v1/payments",
+  cardPaymentApi: "/api/v1/payments",
   continueAuthCardApi: "/api/v1/continueauthentication",
   eftApi: "/api/v1/eftpayments",
   initAuthCardApi: "/api/v1/initauthentication",

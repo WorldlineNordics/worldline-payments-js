@@ -5,7 +5,7 @@ import { cardResponse, sendPaymentResponse } from "./MockResponseConstants";
 const paymentObj = new PaymentRequest();
 const endpointUrl = "/api/v1/payments";
 let data;
-const key = "payment";
+const key = "card";
 
 test("send method of card", () => {
   const result = paymentObj.send(key);

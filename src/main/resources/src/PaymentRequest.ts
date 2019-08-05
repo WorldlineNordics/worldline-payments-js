@@ -66,7 +66,7 @@ export class PaymentRequest extends ProcessRequest {
     } else if (key === "continueAuth") {
       endpointUrl = endpointUrl.concat(paymentConstants.continueAuthCardApi);
     } else if (key === "card") {
-      endpointUrl = endpointUrl.concat(paymentConstants.completeCardApi);
+      endpointUrl = endpointUrl.concat(paymentConstants.cardPaymentApi);
     }
     const data = JSON.stringify({
       cardHolderName: this.cardHolderName,
