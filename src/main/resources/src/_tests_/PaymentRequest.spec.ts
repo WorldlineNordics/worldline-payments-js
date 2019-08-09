@@ -8,7 +8,7 @@ let data;
 const key = "card";
 
 test("send method of card", () => {
-  const result = paymentObj.send(key);
+  const result = paymentObj.send();
   expect(result).toEqual(cardResponse);
   paymentObj.method = result.method;
   paymentObj.cardHolderName = result.cardHolderName;
