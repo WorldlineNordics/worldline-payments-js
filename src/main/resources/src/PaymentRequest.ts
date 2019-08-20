@@ -75,7 +75,7 @@ export class PaymentRequest extends ProcessRequest {
     return this;
   }
 
-  public setPaymentMethod(paymentMethodType) {
+  public setPaymentMethodType(paymentMethodType) {
     let endpointUrl = this.endpoint;
     if (paymentMethodType === "initAuth") {
       endpointUrl = endpointUrl.concat(paymentConstants.initAuthCardApi);
