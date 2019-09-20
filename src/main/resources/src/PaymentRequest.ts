@@ -10,7 +10,6 @@ export class PaymentRequest extends ProcessRequest {
   public storedUserRef: string;
   public provider: string;
   public method: string = "POST";
-  public endpointUrl: string;
 
   public storedUser(storeUserObj) {
     if ("provider" in storeUserObj) {
@@ -69,22 +68,10 @@ export class PaymentRequest extends ProcessRequest {
       expDateMonth: this.expDateMonth,
       expDateYear: this.expDateYear,
       provider: this.provider,
-      storedUserReference: this.storedUserRef
+      storedUserReference: this.storedUserRef,
+      worldlineSessionData: this.worldlineSessionData
     });
     super.sendPayment(this.endpointUrl, data, this.method);
-    return this;
-  }
-
-  public setPaymentMethodType(paymentMethodType) {
-    let endpointUrl = this.endpoint;
-    if (paymentMethodType === "initAuth") {
-      endpointUrl = endpointUrl.concat(paymentConstants.initAuthCardApi);
-    } else if (paymentMethodType === "continueAuth") {
-      endpointUrl = endpointUrl.concat(paymentConstants.continueAuthCardApi);
-    } else if (paymentMethodType === "card") {
-      endpointUrl = endpointUrl.concat(paymentConstants.cardPaymentApi);
-    }
-    this.endpointUrl = endpointUrl;
     return this;
   }
 }

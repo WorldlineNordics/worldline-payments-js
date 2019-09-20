@@ -10,18 +10,12 @@ export class AlternatePaymentRequest extends ProcessRequest {
     return this;
   }
 
-  public send(paymentMethodType) {
-    let endpointUrl;
-    if (paymentMethodType === "ibp" || paymentMethodType === "ewallet") {
-      endpointUrl = this.endpoint.concat(paymentConstants.redirectApi);
-    } else if (paymentMethodType === "eft") {
-      endpointUrl = this.endpoint.concat(paymentConstants.eftApi);
-    }
+  public send() {
     const data = JSON.stringify({
       encryptedPayload: this.encryptedPayload,
       paymentMethodId: this.paymentMethodId
     });
-    super.sendPayment(endpointUrl, data, this.method);
+    super.sendPayment(this.endpointUrl, data, this.method);
     return this;
   }
 }

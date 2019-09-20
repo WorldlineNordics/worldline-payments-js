@@ -1,3 +1,4 @@
+import { paymentConstants } from "./PaymentConstants";
 const PaymentRequestState = {
   ERROR: 4,
   NEW: 1,
@@ -19,6 +20,8 @@ export class ProcessRequest {
   public encryptedPayload: string;
   public endpoint: string;
   public timeout: number;
+  public endpointUrl: string;
+  public worldlineSessionData: string;
 
   public onSuccess(success: any) {
     this.successFn = success;
@@ -29,10 +32,32 @@ export class ProcessRequest {
     this.errorFn = error;
     return this;
   }
-
-  public deviceAPIRequest(deviceAPIObj) {
-    this.encryptedPayload = deviceAPIObj.encryptedPayload;
-    this.endpoint = deviceAPIObj.deviceEndpoint;
+  public deviceAPIRequest(deviceAPIObj, worldlineSessionData) {
+    if (worldlineSessionData) {
+      this.encryptedPayload = deviceAPIObj.encryptedPayload;
+      this.endpoint = deviceAPIObj.deviceEndpoint;
+      this.worldlineSessionData = worldlineSessionData;
+      return this;
+    } else {
+      this.encryptedPayload = deviceAPIObj.encryptedPayload;
+      this.endpoint = deviceAPIObj.deviceEndpoint;
+      return this;
+    }
+  }
+  public setPaymentMethodType(paymentMethodType) {
+    let endpointUrl = this.endpoint;
+    if (paymentMethodType === "initAuth") {
+      endpointUrl = endpointUrl.concat(paymentConstants.initAuthCardApi);
+    } else if (paymentMethodType === "continueAuth") {
+      endpointUrl = endpointUrl.concat(paymentConstants.continueAuthCardApi);
+    } else if (paymentMethodType === "card") {
+      endpointUrl = endpointUrl.concat(paymentConstants.cardPaymentApi);
+    } else if (paymentMethodType === "ibp" || paymentMethodType === "ewallet") {
+      endpointUrl = this.endpoint.concat(paymentConstants.redirectApi);
+    } else if (paymentMethodType === "eft") {
+      endpointUrl = this.endpoint.concat(paymentConstants.eftApi);
+    }
+    this.endpointUrl = endpointUrl;
     return this;
   }
 
