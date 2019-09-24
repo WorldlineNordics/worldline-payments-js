@@ -40,6 +40,22 @@ export const chdFormResponse = {
   method: "POST"
 };
 
+export const deviceAPIResponse = {
+  encryptedPayload:
+    "BgAAA-wdjkb0DYTHKakkOQSmhf87QmWdFFRKHnmcJ7gtfap0b4…mgeBBukLcu_62R9bommN6fanXhhjltfjGVQ9HzHCFk5dW_w==",
+  endpoint: "http://localhost:9354"
+};
+
+export const worldlineSessionDataResponse = {
+  encryptedPayload:
+    "BgAAA-wdjkb0DYTHKakkOQSmhf87QmWdFFRKHnmcJ7gtfap0b4…mgeBBukLcu_62R9bommN6fanXhhjltfjGVQ9HzHCFk5dW_w==",
+  endpoint: "http://localhost:9354",
+  worldlineSessionData:
+    "AThlkCHdnzydrj_2ambZsdCuVjzouINihWfLrWnz5TVeriGCsZ-zzj2dl7eAQbUtIfNLLWe24HRd8mk8X_zzwb7v0EEk="
+};
+
+export const cardPaymentEndpointUrl = "/api/v1/payments";
+
 export const doc = document.implementation.createHTMLDocument(
   "ChildForm Document"
 );

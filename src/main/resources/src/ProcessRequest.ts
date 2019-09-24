@@ -37,27 +37,26 @@ export class ProcessRequest {
       this.encryptedPayload = deviceAPIObj.encryptedPayload;
       this.endpoint = deviceAPIObj.deviceEndpoint;
       this.worldlineSessionData = worldlineSessionData;
-      return this;
     } else {
       this.encryptedPayload = deviceAPIObj.encryptedPayload;
       this.endpoint = deviceAPIObj.deviceEndpoint;
-      return this;
     }
+    return this;
   }
+
   public setPaymentMethodType(paymentMethodType) {
-    let endpointUrl = this.endpoint;
-    if (paymentMethodType === "initAuth") {
-      endpointUrl = endpointUrl.concat(paymentConstants.initAuthCardApi);
-    } else if (paymentMethodType === "continueAuth") {
-      endpointUrl = endpointUrl.concat(paymentConstants.continueAuthCardApi);
-    } else if (paymentMethodType === "card") {
-      endpointUrl = endpointUrl.concat(paymentConstants.cardPaymentApi);
-    } else if (paymentMethodType === "ibp" || paymentMethodType === "ewallet") {
-      endpointUrl = this.endpoint.concat(paymentConstants.redirectApi);
-    } else if (paymentMethodType === "eft") {
-      endpointUrl = this.endpoint.concat(paymentConstants.eftApi);
-    }
-    this.endpointUrl = endpointUrl;
+    this.endpointUrl = this.endpoint;
+    const paymentEndpointUrl = {
+      card: this.endpointUrl.concat(paymentConstants.cardPaymentApi),
+      continueAuth: this.endpointUrl.concat(
+        paymentConstants.continueAuthCardApi
+      ),
+      eft: this.endpointUrl.concat(paymentConstants.eftApi),
+      ewallet: this.endpointUrl.concat(paymentConstants.redirectApi),
+      ibp: this.endpointUrl.concat(paymentConstants.redirectApi),
+      initAuth: this.endpointUrl.concat(paymentConstants.initAuthCardApi)
+    };
+    this.endpointUrl = paymentEndpointUrl[paymentMethodType];
     return this;
   }
 
