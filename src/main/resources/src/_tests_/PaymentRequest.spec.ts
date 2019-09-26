@@ -1,19 +1,9 @@
-jest.mock("../ProcessRequest");
 jest.mock("../PaymentRequest");
-import { PaymentRequest } from "../PaymentRequest";
-import { ProcessRequest } from "../ProcessRequest";
 import {
-  cardPaymentEndpointUrl,
   cardResponse,
-  deviceAPIResponse,
-  sendPaymentResponse,
-  worldlineSessionDataResponse
-} from "./MockResponseConstants";
-
-const paymentObj = new PaymentRequest();
-const processObj = new ProcessRequest();
-const endpointUrl = "/api/v1/payments";
-let data;
+  sendPaymentResponse
+} from "../__mocks__/MockResponseConstants";
+import { PaymentRequest } from "../PaymentRequest";
 
 const deviceAPIObj = {
   encryptedPayload:
@@ -22,6 +12,9 @@ const deviceAPIObj = {
 };
 const worldlineSessionData =
   "AThlkCHdnzydrj_2ambZsdCuVjzouINihWfLrWnz5TVeriGCsZ-zzj2dl7eAQbUtIfNLLWe24HRd8mk8X_zzwb7v0EEk=";
+const paymentObj = new PaymentRequest(deviceAPIObj, worldlineSessionData);
+const endpointUrl = "/api/v1/payments";
+let data;
 
 test("send method of card", () => {
   const result = paymentObj.send();
@@ -46,22 +39,4 @@ test("send method of card", () => {
 test("sendPayment method of card", () => {
   const response = paymentObj.sendPayment(endpointUrl, data, paymentObj.method);
   expect(response).toEqual(sendPaymentResponse);
-});
-
-test("deviceApiRequest method with worldlineSessionData", () => {
-  const response = processObj.deviceAPIRequest(
-    deviceAPIObj,
-    worldlineSessionData
-  );
-  expect(response).toEqual(worldlineSessionDataResponse);
-});
-
-test("deviceApiRequest method without worldlineSessionData", () => {
-  const response = processObj.deviceAPIRequest(deviceAPIObj, "");
-  expect(response).toEqual(deviceAPIResponse);
-});
-
-test("setPaymentMethodType method for card", () => {
-  const response = processObj.setPaymentMethodType("card");
-  expect(response).toEqual(cardPaymentEndpointUrl);
 });

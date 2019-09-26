@@ -23,16 +23,7 @@ export class ProcessRequest {
   public endpointUrl: string;
   public worldlineSessionData: string;
 
-  public onSuccess(success: any) {
-    this.successFn = success;
-    return this;
-  }
-
-  public onError(error: any) {
-    this.errorFn = error;
-    return this;
-  }
-  public deviceAPIRequest(deviceAPIObj, worldlineSessionData) {
+  constructor(deviceAPIObj, worldlineSessionData) {
     if (worldlineSessionData) {
       this.encryptedPayload = deviceAPIObj.encryptedPayload;
       this.endpoint = deviceAPIObj.deviceEndpoint;
@@ -41,6 +32,16 @@ export class ProcessRequest {
       this.encryptedPayload = deviceAPIObj.encryptedPayload;
       this.endpoint = deviceAPIObj.deviceEndpoint;
     }
+    return this;
+  }
+
+  public onSuccess(success: any) {
+    this.successFn = success;
+    return this;
+  }
+
+  public onError(error: any) {
+    this.errorFn = error;
     return this;
   }
 

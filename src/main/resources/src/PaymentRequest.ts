@@ -11,6 +11,10 @@ export class PaymentRequest extends ProcessRequest {
   public provider: string;
   public method: string = "POST";
 
+  constructor(deviceAPIObj, worldlineSessionData) {
+    super(deviceAPIObj, worldlineSessionData);
+  }
+
   public storedUser(storeUserObj) {
     if ("provider" in storeUserObj) {
       this.provider = storeUserObj.provider;

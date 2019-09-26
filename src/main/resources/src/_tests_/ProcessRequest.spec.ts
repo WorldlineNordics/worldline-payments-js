@@ -1,6 +1,13 @@
 import jest from "jest-mock";
 import mock from "xhr-mock";
 import { ProcessRequest } from "../ProcessRequest";
+const deviceAPIObj = {
+  encryptedPayload:
+    "BgAAA-wdjkb0DYTHKakkOQSmhf87QmWdFFRKHnmcJ7gtfap0b4…mgeBBukLcu_62R9bommN6fanXhhjltfjGVQ9HzHCFk5dW_w==",
+  endpointUrl: "http://localhost:9354"
+};
+const worldlineSessionData =
+  "AThlkCHdnzydrj_2ambZsdCuVjzouINihWfLrWnz5TVeriGCsZ-zzj2dl7eAQbUtIfNLLWe24HRd8mk8X_zzwb7v0EEk=";
 const endpoint =
   "http://wp121dapp020.dc12.digitalriverws.net:9354/api/v1/payments";
 const successResponse = {
@@ -19,7 +26,7 @@ const data = JSON.stringify({
   expDateMonth: "01",
   expDateYear: "2020"
 });
-const processRequest = new ProcessRequest();
+const processRequest = new ProcessRequest(deviceAPIObj, worldlineSessionData);
 processRequest.timeout = 60000;
 const timeout = processRequest.timeout;
 

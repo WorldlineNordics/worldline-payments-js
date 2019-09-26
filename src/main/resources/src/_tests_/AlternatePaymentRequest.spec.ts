@@ -1,9 +1,20 @@
 jest.mock("../ProcessRequest");
 jest.mock("../AlternatePaymentRequest");
+import {
+  ibpResponse,
+  sendPaymentResponse
+} from "../__mocks__/MockResponseConstants";
 import { AlternatePaymentRequest } from "../AlternatePaymentRequest";
-import { ibpResponse, sendPaymentResponse } from "./MockResponseConstants";
-
-const alternatePayment = new AlternatePaymentRequest();
+const deviceAPIObj = {
+  encryptedPayload:
+    "BgAAA-wdjkb0DYTHKakkOQSmhf87QmWdFFRKHnmcJ7gtfap0b4…mgeBBukLcu_62R9bommN6fanXhhjltfjGVQ9HzHCFk5dW_w==",
+  endpoint: "http://localhost:9354"
+};
+const worldlineSessionData = "";
+const alternatePayment = new AlternatePaymentRequest(
+  deviceAPIObj,
+  worldlineSessionData
+);
 let data;
 
 test("send method of ibp", () => {

@@ -4,6 +4,9 @@ export class PaymentMethodRequest extends ProcessRequest {
   public paymentMethodType: string;
   public method: string = "POST";
 
+  constructor(deviceAPIObj, worldlineSessionData) {
+    super(deviceAPIObj, worldlineSessionData);
+  }
   public pmType(n) {
     this.paymentMethodType = n;
     return this;

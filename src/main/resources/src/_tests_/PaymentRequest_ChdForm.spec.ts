@@ -1,6 +1,8 @@
+import { chdFormResponse, doc } from "../__mocks__/MockResponseConstants";
 import { PaymentRequest } from "../PaymentRequest";
-import { chdFormResponse, doc } from "./MockResponseConstants";
-const paymentObj = new PaymentRequest();
+const deviceAPIObj = {};
+const worldlineSessionData = "";
+const paymentObj = new PaymentRequest(deviceAPIObj, worldlineSessionData);
 const tag = "data-chd";
 
 test("chdForm method of Payment Request for card payment", () => {

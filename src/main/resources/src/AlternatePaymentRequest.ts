@@ -4,6 +4,10 @@ export class AlternatePaymentRequest extends ProcessRequest {
   public paymentMethodId: string;
   public method: string = "POST";
 
+  constructor(deviceAPIObj, worldlineSessionData) {
+    super(deviceAPIObj, worldlineSessionData);
+  }
+
   public paymentForm(document: Document, tag: string) {
     const el = document.querySelector("[" + tag + "]");
     this.paymentMethodId = (el as HTMLInputElement).value;
