@@ -27,7 +27,7 @@ const data = JSON.stringify({
   expDateYear: "2020"
 });
 const processRequest = new ProcessRequest(deviceAPIObj, worldlineSessionData);
-processRequest.timeout = 60000;
+processRequest.timeout = 5000;
 const timeout = processRequest.timeout;
 
 describe("API calling", () => {
