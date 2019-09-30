@@ -10,9 +10,11 @@ export class PaymentRequest extends ProcessRequest {
   public storedUserRef: string;
   public provider: string;
   public method: string = "POST";
+  private worldlineSessionData: string;
 
-  constructor(deviceAPIObj, worldlineSessionData) {
-    super(deviceAPIObj, worldlineSessionData);
+  public setWorldlineSessionData(worldlineSessionData: string) {
+    this.worldlineSessionData = worldlineSessionData;
+    return this;
   }
 
   public storedUser(storeUserObj) {
@@ -63,19 +65,17 @@ export class PaymentRequest extends ProcessRequest {
     return this;
   }
 
-  public send() {
-    const data = JSON.stringify({
+  public send(): void {
+    const data = {
       cardHolderName: this.cardHolderName,
       cardNumber: this.cardNumber,
       cvCode: this.cvCode,
-      encryptedPayload: this.encryptedPayload,
       expDateMonth: this.expDateMonth,
       expDateYear: this.expDateYear,
       provider: this.provider,
       storedUserReference: this.storedUserRef,
       worldlineSessionData: this.worldlineSessionData
-    });
-    super.sendPayment(this.endpointUrl, data, this.method);
-    return this;
+    };
+    super.sendPayment(data, this.method);
   }
 }

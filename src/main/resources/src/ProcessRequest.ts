@@ -17,23 +17,18 @@ let state = PaymentRequestState.NEW;
 export class ProcessRequest {
   public successFn: any;
   public errorFn: any;
-  public encryptedPayload: string;
-  public endpoint: string;
   public timeout: number;
-  public endpointUrl: string;
-  public worldlineSessionData: string;
-
-  constructor(deviceAPIObj, worldlineSessionData) {
-    if (worldlineSessionData) {
-      this.encryptedPayload = deviceAPIObj.encryptedPayload;
-      this.endpoint = deviceAPIObj.deviceEndpoint;
-      this.worldlineSessionData = worldlineSessionData;
-    } else {
-      this.encryptedPayload = deviceAPIObj.encryptedPayload;
-      this.endpoint = deviceAPIObj.deviceEndpoint;
-    }
-    return this;
-  }
+  protected encryptedPayload: string;
+  protected endpoint: string;
+  protected paymentMethodType: string;
+  private PAYMENT_ENDPOINT_URL = {
+    card: paymentConstants.cardPaymentApi,
+    continueAuth: paymentConstants.continueAuthCardApi,
+    eft: paymentConstants.eftApi,
+    ewallet: paymentConstants.redirectApi,
+    ibp: paymentConstants.redirectApi,
+    initAuth: paymentConstants.initAuthCardApi
+  };
 
   public onSuccess(success: any) {
     this.successFn = success;
@@ -45,25 +40,32 @@ export class ProcessRequest {
     return this;
   }
 
-  public setPaymentMethodType(paymentMethodType) {
-    this.endpointUrl = this.endpoint;
-    const paymentEndpointUrl = {
-      card: this.endpointUrl.concat(paymentConstants.cardPaymentApi),
-      continueAuth: this.endpointUrl.concat(
-        paymentConstants.continueAuthCardApi
-      ),
-      eft: this.endpointUrl.concat(paymentConstants.eftApi),
-      ewallet: this.endpointUrl.concat(paymentConstants.redirectApi),
-      ibp: this.endpointUrl.concat(paymentConstants.redirectApi),
-      initAuth: this.endpointUrl.concat(paymentConstants.initAuthCardApi)
-    };
-    this.endpointUrl = paymentEndpointUrl[paymentMethodType];
+  public setEncryptedPayload(encryptedPayload: string) {
+    this.encryptedPayload = encryptedPayload;
     return this;
   }
 
-  public sendPayment(endpoint: string, data: string, method: string) {
+  public setEndpoint(endpoint: string) {
+    this.endpoint = endpoint;
+    return this;
+  }
+
+  public setPaymentMethodType(paymentMethodType) {
+    this.paymentMethodType = paymentMethodType;
+    return this;
+  }
+
+  public sendPayment(data: any, method: string) {
+    const endpointUrl = this.endpoint.concat(
+      this.PAYMENT_ENDPOINT_URL[this.paymentMethodType]
+    );
+    data.encryptedPayload = this.encryptedPayload;
+    this.sendData(endpointUrl, data, method);
+  }
+
+  protected sendData(endpointUrl: string, data: any, method: string) {
     const xhttp = new XMLHttpRequest();
-    xhttp.open(method, endpoint, true);
+    xhttp.open(method, endpointUrl, true);
     xhttp.timeout = 60000;
     xhttp.setRequestHeader("Content-type", "application/json");
     const worldlineRequest = this;
@@ -106,7 +108,7 @@ export class ProcessRequest {
 
     state = PaymentRequestState.SENT;
     if (method === "POST") {
-      xhttp.send(data);
+      xhttp.send(JSON.stringify(data));
     } else if (method === "GET") {
       xhttp.send();
     }

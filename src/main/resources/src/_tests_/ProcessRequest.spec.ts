@@ -1,13 +1,7 @@
 import jest from "jest-mock";
 import mock from "xhr-mock";
-import { ProcessRequest } from "../ProcessRequest";
-const deviceAPIObj = {
-  encryptedPayload:
-    "BgAAA-wdjkb0DYTHKakkOQSmhf87QmWdFFRKHnmcJ7gtfap0b4…mgeBBukLcu_62R9bommN6fanXhhjltfjGVQ9HzHCFk5dW_w==",
-  endpointUrl: "http://localhost:9354"
-};
-const worldlineSessionData =
-  "AThlkCHdnzydrj_2ambZsdCuVjzouINihWfLrWnz5TVeriGCsZ-zzj2dl7eAQbUtIfNLLWe24HRd8mk8X_zzwb7v0EEk=";
+import { ProcessRequest } from "../__mocks__/ProcessRequest";
+
 const endpoint =
   "http://wp121dapp020.dc12.digitalriverws.net:9354/api/v1/payments";
 const successResponse = {
@@ -26,7 +20,7 @@ const data = JSON.stringify({
   expDateMonth: "01",
   expDateYear: "2020"
 });
-const processRequest = new ProcessRequest(deviceAPIObj, worldlineSessionData);
+const processRequest = new ProcessRequest();
 processRequest.timeout = 5000;
 const timeout = processRequest.timeout;
 
@@ -46,7 +40,7 @@ describe("API calling", () => {
       return res.status(201).body(JSON.stringify(successResponse));
     });
     const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, "send");
-    await processRequest.sendPayment(endpoint, data, "POST");
+    await processRequest.sendData(endpoint, data, "POST");
     expect(spy).toBeCalledWith(data);
   });
 
@@ -61,7 +55,7 @@ describe("API calling", () => {
       return res.status(201).body(JSON.stringify(successResponse));
     });
     const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, "send");
-    await processRequest.sendPayment(endpoint, data, "GET");
+    await processRequest.sendData(endpoint, data, "GET");
     expect(spy).toHaveBeenCalled();
   });
 
@@ -75,10 +69,10 @@ describe("API calling", () => {
     mock.post(endpoint, (req, res) => {
       return res.status(405).body(JSON.stringify(errResponse));
     });
-    await processRequest.sendPayment(endpoint, data, "POST");
+    await processRequest.sendData(endpoint, data, "POST");
   });
 
-  it("Should make error get request of sendPayment()", async () => {
+  it("Should make error get request of sendData()", async () => {
     processRequest.successFn = jest.fn(() => {
       /* do nothing */
     });
@@ -88,10 +82,10 @@ describe("API calling", () => {
     mock.get(endpoint, (req, res) => {
       return res.status(501).body(JSON.stringify(errResponse));
     });
-    await processRequest.sendPayment(endpoint, data, "GET");
+    await processRequest.sendData(endpoint, data, "GET");
   });
 
-  it("Should make Error request to call onerror() of sendPayment()", async () => {
+  it("Should make Error request to call onerror() of sendData()", async () => {
     processRequest.successFn = jest.fn(() => {
       /* do nothing */
     });
@@ -104,11 +98,11 @@ describe("API calling", () => {
     mock.post(endpoint, (req, res) => {
       return Promise.reject(new Error("Could not send transaction"));
     });
-    await processRequest.sendPayment(endpoint, data, "POST");
+    await processRequest.sendData(endpoint, data, "POST");
   });
 
   it(
-    "Should get timeout and should call ontimeout() of sendPayment()",
+    "Should get timeout and should call ontimeout() of sendData()",
     async done => {
       processRequest.successFn = jest.fn(() => {
         /* do nothing */
@@ -123,7 +117,7 @@ describe("API calling", () => {
             /* do nothing */
           })
       );
-      await processRequest.sendPayment(endpoint, data, "GET");
+      await processRequest.sendData(endpoint, data, "GET");
       setTimeout(() => {
         done();
       }, timeout + 1);
