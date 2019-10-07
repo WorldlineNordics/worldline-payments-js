@@ -59,11 +59,11 @@ export class PaymentService {
     this.endpointUrl = this.endpoint.concat(paymentConstants.cardPaymentApi);
     return this;
   }
-  public redirect() {
+  public redirectPayment() {
     this.endpointUrl = this.endpoint.concat(paymentConstants.redirectApi);
     return this;
   }
-  public eft() {
+  public eftPayment() {
     this.endpointUrl = this.endpoint.concat(paymentConstants.eftApi);
     return this;
   }
@@ -101,25 +101,6 @@ export class PaymentService {
       storedUserReference: this.storedUserRef,
       worldlineSessionData: this.worldlineSessionData
     };
-    return this;
-  }
-
-  public card(cardObj) {
-    if ("cardNumber" in cardObj) {
-      this.cardNumber = cardObj.cardNumber;
-    }
-    if ("cardHolderName" in cardObj) {
-      this.cardHolderName = cardObj.cardHolderName;
-    }
-    if ("expDateMonth" in cardObj) {
-      this.expDateMonth = cardObj.cardExpiryMonth;
-    }
-    if ("expDateYear" in cardObj) {
-      this.expDateYear = cardObj.cardExpiryYear;
-    }
-    if ("cvCode" in cardObj) {
-      this.cvCode = cardObj.cardCVC;
-    }
     return this;
   }
 
