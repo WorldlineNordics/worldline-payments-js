@@ -1,4 +1,4 @@
-import { PaymentService } from "./PaymentService";
+import { PaymentService } from './PaymentService';
 
 module.exports = {
   PaymentService
