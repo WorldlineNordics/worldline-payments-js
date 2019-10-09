@@ -30,7 +30,7 @@ export class PaymentService {
   protected encryptedPayload: string;
   protected endpoint: string;
   protected paymentMethodType: string;
-  private worldlineSessionData: string;
+  protected worldlineSessionData: string;
 
   constructor(deviceAPIObj) {
     this.encryptedPayload = deviceAPIObj.encryptedPayload;
@@ -40,6 +40,10 @@ export class PaymentService {
 
   public setWorldlineSessionData(worldlineSessionData: string) {
     this.worldlineSessionData = worldlineSessionData;
+    this.data = {
+      encryptedPayload: this.encryptedPayload,
+      worldlineSessionData: this.worldlineSessionData
+    };
     return this;
   }
 
