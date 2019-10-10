@@ -12,38 +12,28 @@ const PaymentRequestState = {
   }
 };
 
-let state = PaymentRequestState.NEW;
-
 export class PaymentService {
-  public cardHolderName: string;
-  public cardNumber: string;
-  public endpointUrl: string;
-  public expDateMonth: number;
-  public expDateYear: number;
-  public cvCode: number;
-  public storedUserRef: string;
-  public provider: string;
-  public method: string = 'POST';
-  public timeout: number;
-  public data: any;
-  public paymentMethodId: string;
-  protected encryptedPayload: string;
-  protected endpoint: string;
-  protected paymentMethodType: string;
-  protected worldlineSessionData: string;
+  private cardHolderName: string;
+  private cardNumber: string;
+  private endpointUrl: string;
+  private expDateMonth: number;
+  private expDateYear: number;
+  private cvCode: number;
+  private data: any;
+  private method: string = 'POST';
+  private paymentMethodId: string;
+  private encryptedPayload: string;
+  private endpoint: string;
+  private paymentMethodType: string;
+  private worldlineSessionData: string;
 
   constructor(deviceAPIObj) {
     this.encryptedPayload = deviceAPIObj.encryptedPayload;
     this.endpoint = deviceAPIObj.deviceEndpoint;
-    return this;
   }
 
   public setWorldlineSessionData(worldlineSessionData: string) {
     this.worldlineSessionData = worldlineSessionData;
-    this.data = {
-      encryptedPayload: this.encryptedPayload,
-      worldlineSessionData: this.worldlineSessionData
-    };
     return this;
   }
 
@@ -72,71 +62,49 @@ export class PaymentService {
     return this;
   }
 
-  public storedUser(storeUserObj) {
-    if ('provider' in storeUserObj) {
-      this.provider = storeUserObj.provider;
-    }
-    if ('storedUserReference' in storeUserObj) {
-      this.storedUserRef = storeUserObj.storedUserRef;
-    }
-    return this;
-  }
-
   public chdForm(document: Document, tag: string) {
     const chdElements = document.querySelectorAll('[' + tag + ']');
     const chd = {};
     chdElements.forEach(x => {
       chd[x.attributes['data-chd'].nodeValue] = (x as HTMLInputElement).value;
     });
-
     this.cardHolderName = chd['cardHolderName'];
     this.cardNumber = chd['cardNumber'];
     this.expDateMonth = chd['cardExpiryMonth'];
     this.expDateYear = chd['cardExpiryYear'];
     this.cvCode = chd['cardCVC'];
-    this.data = {
+    return this;
+  }
+
+  public paymentForm(document: Document, tag: string) {
+    const el = document.querySelector('[' + tag + ']');
+    this.paymentMethodId = (el as HTMLInputElement).value;
+    return this;
+  }
+
+  public getPaymentMethods(paymentMethodType) {
+    this.paymentMethodType = paymentMethodType;
+    this.endpointUrl = this.endpoint.concat(paymentConstants.paymentMethodApi);
+    return this;
+  }
+  public buildRequest() {
+    const data = {
       cardHolderName: this.cardHolderName,
       cardNumber: this.cardNumber,
       cvCode: this.cvCode,
       encryptedPayload: this.encryptedPayload,
       expDateMonth: this.expDateMonth,
       expDateYear: this.expDateYear,
-      provider: this.provider,
-      storedUserReference: this.storedUserRef,
+      paymentMethodId: this.paymentMethodId,
+      paymentMethodType: this.paymentMethodType,
       worldlineSessionData: this.worldlineSessionData
     };
-    return this;
+    return data;
   }
 
-  public storedUserReference(n) {
-    this.storedUserRef = n;
-  }
-
-  public paymentForm(document: Document, tag: string) {
-    const el = document.querySelector('[' + tag + ']');
-    this.paymentMethodId = (el as HTMLInputElement).value;
-    this.data = {
-      encryptedPayload: this.encryptedPayload,
-      paymentMethodId: this.paymentMethodId
-    };
-    return this;
-  }
-
-  public pmType(n) {
-    this.paymentMethodType = n;
-    return this;
-  }
-
-  public getPaymentMethods() {
-    this.endpointUrl = this.endpoint.concat(paymentConstants.paymentMethodApi);
-    this.data = {
-      encryptedPayload: this.encryptedPayload,
-      paymentMethodType: this.paymentMethodType
-    };
-    return this;
-  }
-
-  protected send() {
+  public send() {
+    let state = PaymentRequestState.NEW;
+    this.data = this.buildRequest();
     return new Promise((resolve, reject) => {
       const xhttp = new XMLHttpRequest();
       xhttp.open(this.method, this.endpointUrl, true);

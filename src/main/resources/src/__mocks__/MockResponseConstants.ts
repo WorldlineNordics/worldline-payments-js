@@ -1,24 +1,17 @@
-
 export const chdFormResponse = {
-  PAYMENT_ENDPOINT_URL: {
-    card: "/api/v1/payments",
-    continueAuth: "/api/v1/continueauthentication",
-    eft: "/api/v1/eftpayments",
-    ewallet: "/api/v1/redirectpayments",
-    ibp: "/api/v1/redirectpayments",
-    initAuth: "/api/v1/initauthentication"
-  },
-  cardHolderName: "Mary",
-  cardNumber: "4444333322221111",
-  cvCode: "123",
-  expDateMonth: "12",
-  expDateYear: "2020",
-  method: "POST"
+  cardHolderName: 'Mary',
+  cardNumber: '4444333322221111',
+  cvCode: '123',
+  encryptedPayload:
+    'BgAAA-wdjkb0DYTHKakkOQSmhf87QmWdFFRKHnmcJ7gtfap0b4…mgeBBukLcu_62R9bommN6fanXhhjltfjGVQ9HzHCFk5dW_w==',
+  endpoint: undefined,
+  expDateMonth: '12',
+  expDateYear: '2020',
+  method: 'POST'
 };
 
-
 export const doc = document.implementation.createHTMLDocument(
-  "ChildForm Document"
+  'ChildForm Document'
 );
 doc.body.innerHTML = `
 <input
