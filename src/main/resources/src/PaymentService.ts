@@ -1,16 +1,4 @@
 import { paymentConstants } from './PaymentConstants';
-const PaymentRequestState = {
-  ERROR: 4,
-  NEW: 1,
-  OK: 3,
-  SENT: 2,
-  properties: {
-    1: { name: 'NEW', value: 1 },
-    2: { name: 'SENT', value: 2 },
-    3: { name: 'OK', value: 3 },
-    4: { name: 'ERROR', value: 4 }
-  }
-};
 
 export class PaymentService {
   private cardHolderName: string;
@@ -87,7 +75,7 @@ export class PaymentService {
     this.endpointUrl = this.endpoint.concat(paymentConstants.paymentMethodApi);
     return this;
   }
-  public buildRequest() {
+  public getRequestData() {
     const data = {
       cardHolderName: this.cardHolderName,
       cardNumber: this.cardNumber,
@@ -103,51 +91,43 @@ export class PaymentService {
   }
 
   public send() {
-    let state = PaymentRequestState.NEW;
-    this.data = this.buildRequest();
+    this.data = this.getRequestData();
+    const getRejectObject = (xhttp: XMLHttpRequest, text: string) => {
+      return {
+        status: xhttp.status,
+        statusText: text
+      };
+    };
     return new Promise((resolve, reject) => {
       const xhttp = new XMLHttpRequest();
       xhttp.open(this.method, this.endpointUrl, true);
       xhttp.timeout = 60000;
       xhttp.setRequestHeader('Content-type', 'application/json');
+
       xhttp.onload = () => {
         if (xhttp.status >= 200 && xhttp.status < 300) {
-          state = PaymentRequestState.OK;
           resolve(JSON.parse(xhttp.response));
         } else if (xhttp.status === 405) {
-          state = PaymentRequestState.ERROR;
-          reject({
-            status: xhttp.status,
-            statusText: 'Please verify the Worldline Device API URL'
-          });
+          reject(
+            getRejectObject(xhttp, 'Please verify the Worldline Device API URL')
+          );
         } else {
-          state = PaymentRequestState.ERROR;
-          reject({
-            status: xhttp.status,
-            statusText: xhttp.statusText
-          });
+          reject(getRejectObject(xhttp, xhttp.statusText));
         }
       };
 
-      xhttp.onerror = () => {
-        state = PaymentRequestState.ERROR;
-        reject({
-          status: xhttp.status,
-          statusText:
+      xhttp.onerror = () =>
+        reject(
+          getRejectObject(
+            xhttp,
             xhttp.statusText === ''
               ? 'Could not send transaction.'
               : xhttp.statusText
-        });
-      };
-      xhttp.ontimeout = () => {
-        state = PaymentRequestState.ERROR;
-        reject({
-          status: xhttp.status,
-          statusText: xhttp.statusText
-        });
-      };
+          )
+        );
 
-      state = PaymentRequestState.SENT;
+      xhttp.ontimeout = () => reject(getRejectObject(xhttp, xhttp.statusText));
+
       if (this.method === 'POST') {
         xhttp.send(JSON.stringify(this.data));
       } else if (this.method === 'GET') {
