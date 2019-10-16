@@ -1,11 +1,6 @@
 import { chdFormResponse, doc } from '../__mocks__/MockResponseConstants';
-import { PaymentService } from '../PaymentService';
-const deviceAPIObj = {
-  encryptedPayload:
-    'BgAAA-wdjkb0DYTHKakkOQSmhf87QmWdFFRKHnmcJ7gtfap0b4…mgeBBukLcu_62R9bommN6fanXhhjltfjGVQ9HzHCFk5dW_w==',
-  endpoint: 'http://localhost:9354'
-};
-const paymentObj = new PaymentService(deviceAPIObj);
+import { PaymentService } from '../__mocks__/PaymentService';
+const paymentObj = new PaymentService();
 const tag = 'data-chd';
 
 test('chdForm method of Payment Request for card payment', () => {

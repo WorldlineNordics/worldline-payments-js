@@ -2,12 +2,8 @@ export const chdFormResponse = {
   cardHolderName: 'Mary',
   cardNumber: '4444333322221111',
   cvCode: '123',
-  encryptedPayload:
-    'BgAAA-wdjkb0DYTHKakkOQSmhf87QmWdFFRKHnmcJ7gtfap0b4…mgeBBukLcu_62R9bommN6fanXhhjltfjGVQ9HzHCFk5dW_w==',
-  endpoint: undefined,
   expDateMonth: '12',
-  expDateYear: '2020',
-  method: 'POST'
+  expDateYear: '2020'
 };
 
 export const doc = document.implementation.createHTMLDocument(

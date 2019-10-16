@@ -14,10 +14,21 @@ export class PaymentService {
   private endpoint: string;
   private paymentMethodType: string;
   private worldlineSessionData: string;
+  private timeout: number = 60000;
 
   constructor(deviceAPIObj) {
     this.encryptedPayload = deviceAPIObj.encryptedPayload;
-    this.endpoint = deviceAPIObj.deviceEndpoint;
+    this.endpoint = deviceAPIObj.deviceEndpoint.substring(
+      0,
+      deviceAPIObj.deviceEndpoint.indexOf('/api')
+    );
+  }
+
+  public setRequestTimeout(timeout: number) {
+    if (timeout) {
+      this.timeout = timeout;
+    }
+    return this;
   }
 
   public setWorldlineSessionData(worldlineSessionData: string) {
@@ -101,7 +112,7 @@ export class PaymentService {
     return new Promise((resolve, reject) => {
       const xhttp = new XMLHttpRequest();
       xhttp.open(this.method, this.endpointUrl, true);
-      xhttp.timeout = 60000;
+      xhttp.timeout = this.timeout;
       xhttp.setRequestHeader('Content-type', 'application/json');
 
       xhttp.onload = () => {
