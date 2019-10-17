@@ -32,7 +32,7 @@ export class PaymentService {
   }
 
   public setRequestTimeout(timeout: number) {
-    if (timeout > 2000) {
+    if (timeout >= 2000) {
       this.timeout = timeout;
     }
     return this;
