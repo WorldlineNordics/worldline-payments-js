@@ -16,16 +16,23 @@ export class PaymentService {
   private worldlineSessionData: string;
   private timeout: number = 60000;
 
-  constructor(deviceAPIObj) {
+  constructor(deviceAPIObj: any) {
     this.encryptedPayload = deviceAPIObj.encryptedPayload;
-    this.endpoint = deviceAPIObj.deviceEndpoint.substring(
-      0,
-      deviceAPIObj.deviceEndpoint.indexOf('/api')
-    );
+    this.endpoint = this.getEndpoint(deviceAPIObj);
+  }
+
+  public getEndpoint(deviceAPIObj: any) {
+    if (deviceAPIObj.deviceEndpoint) {
+      const endpointEndsIndex = deviceAPIObj.deviceEndpoint.indexOf('/api');
+      if (endpointEndsIndex !== -1) {
+        return deviceAPIObj.deviceEndpoint.substring(0, endpointEndsIndex);
+      }
+    }
+    return deviceAPIObj.deviceEndpoint;
   }
 
   public setRequestTimeout(timeout: number) {
-    if (timeout) {
+    if (timeout > 2000) {
       this.timeout = timeout;
     }
     return this;
@@ -81,7 +88,7 @@ export class PaymentService {
     return this;
   }
 
-  public getPaymentMethods(paymentMethodType) {
+  public getPaymentMethods(paymentMethodType: string) {
     this.paymentMethodType = paymentMethodType;
     this.endpointUrl = this.endpoint.concat(paymentConstants.paymentMethodApi);
     return this;
