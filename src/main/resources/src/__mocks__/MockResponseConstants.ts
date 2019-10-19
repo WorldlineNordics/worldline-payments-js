@@ -1,9 +1,12 @@
+export const endpointUrl = 'http://localhost:9354';
+
 export const chdFormResponse = {
   cardHolderName: 'Mary',
   cardNumber: '4444333322221111',
   cvCode: '123',
   expDateMonth: '12',
-  expDateYear: '2020'
+  expDateYear: '2020',
+  version: 'worldlinejs-1.1.0'
 };
 
 export const doc = document.implementation.createHTMLDocument(

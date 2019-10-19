@@ -7,6 +7,17 @@ export class PaymentService {
   private expDateMonth: number = 11;
   private expDateYear: number = 2020;
   private cvCode: number = 123;
+  private version: string = 'worldlinejs-1.1.0';
+
+  public getEndpoint(deviceAPIObj: any) {
+    if (deviceAPIObj.deviceEndpoint) {
+      const endpointEndsIndex = deviceAPIObj.deviceEndpoint.indexOf('/api');
+      if (endpointEndsIndex !== -1) {
+        return deviceAPIObj.deviceEndpoint.substring(0, endpointEndsIndex);
+      }
+    }
+    return deviceAPIObj.deviceEndpoint;
+  }
 
   public getRequestData() {
     const data = {
@@ -49,8 +60,15 @@ export class PaymentService {
       const xhttp = new XMLHttpRequest();
       xhttp.open(this.method, this.endpointUrl, true);
       xhttp.timeout = 60000;
-      xhttp.setRequestHeader('Content-type', 'application/json');
-
+      const headers = {
+        'Content-type': 'application/json',
+        'X-JS-SDK-VERSION': this.version
+      };
+      for (const key in headers) {
+        if (headers.hasOwnProperty(key)) {
+          xhttp.setRequestHeader(key, headers[key]);
+        }
+      }
       xhttp.onload = () => {
         if (xhttp.status >= 200 && xhttp.status < 300) {
           resolve(JSON.parse(xhttp.response));

@@ -1,5 +1,6 @@
 import jest from 'jest-mock';
 import mock from 'xhr-mock';
+import { endpointUrl } from '../__mocks__/MockResponseConstants';
 import { PaymentService } from '../__mocks__/PaymentService';
 const endpoint =
   'http://wp121dapp020.dc12.digitalriverws.net:9354/api/v1/payments/';
@@ -100,5 +101,25 @@ describe('API calling', () => {
 
   afterEach(() => {
     mock.teardown();
+  });
+
+  test('getEndpoint method of Payment Service for endpointUrl-case 1', () => {
+    const deviceAPIObj = {
+      deviceEndpoint: 'http://localhost:9354/api/v1/payments',
+      encryptedPayload:
+        'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe'
+    };
+    const response = serviceRequest.getEndpoint(deviceAPIObj);
+    expect(response).toEqual(endpointUrl);
+  });
+
+  test('getEndpoint method of Payment Service for endpointUrl-case 2', () => {
+    const deviceAPIObj = {
+      deviceEndpoint: 'http://localhost:9354',
+      encryptedPayload:
+        'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe'
+    };
+    const response = serviceRequest.getEndpoint(deviceAPIObj);
+    expect(response).toEqual(endpointUrl);
   });
 });
