@@ -1,13 +1,12 @@
+export const endpointUrl = 'http://localhost:9354';
+
 export const chdFormResponse = {
   cardHolderName: 'Mary',
   cardNumber: '4444333322221111',
   cvCode: '123',
-  encryptedPayload:
-    'BgAAA-wdjkb0DYTHKakkOQSmhf87QmWdFFRKHnmcJ7gtfap0b4…mgeBBukLcu_62R9bommN6fanXhhjltfjGVQ9HzHCFk5dW_w==',
-  endpoint: undefined,
   expDateMonth: '12',
   expDateYear: '2020',
-  method: 'POST'
+  version: 'worldlinejs-1.1.0'
 };
 
 export const doc = document.implementation.createHTMLDocument(

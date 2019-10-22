@@ -1,5 +1,6 @@
 import jest from 'jest-mock';
 import mock from 'xhr-mock';
+import { endpointUrl } from '../__mocks__/MockResponseConstants';
 import { PaymentService } from '../__mocks__/PaymentService';
 const endpoint =
   'http://wp121dapp020.dc12.digitalriverws.net:9354/api/v1/payments/';
@@ -24,11 +25,11 @@ const errResponse = {
 const data = JSON.stringify({
   cardHolderName: 'John',
   cardNumber: '4444333322221111',
-  cvCode: '123',
+  cvCode: 123,
   encryptedPayload:
     'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJeiiFC97jgpzsWjW-71lLAlyqb2jQh_SWNZzaLqsRqjeSAe6wWaat6y66ljFGEeuqqBczCRIY84V7YXiibunYH6xkhE8SN5wPUB2KNpGSeNI2gZT2n1wvOaMXXsl3ZugpW90E2xloVRZclzBsLnSgU0suvy0N2aFfv_BRlBMTHEJ7cqnVMK-z18msaRCmaLCemTQSuiAyqe7hyVzLw_h5Uw6f_Bt8rKQB9gcDfiHiUZICQ16CZeVUZogpQRVA4F6GZiIO77GEkxX9IDDPO4-76pSYcfVKaSIm6LrzgudHz1DCE6Ier1zBB2X4w84btAmZWlfqQM-_yab-HMy7M547iOzYenq85vVaMsLDDSYFND7U6CCVfVxD6lKe_PMXXuNGkb4k7XKc8qlFYTkhD3tHXagFwIeVDYxT8qWZ6-vdnjHuEtcATn77cEl55p9XmcRjELrdFGKP33IQpoPzri7ATLNM8HDx7lbINTpP6vAWmmjg2cvGqtpuSau6xWqjo7tE7qL7imI90Ud3zHFUqgPCe_5-E8ynWud5FOrLrEb6W3YL4y6IFndAFC2fsiV9q6dAi6zzuxLTpZbAydG9r4GvGk_sZNWZuhcFLCLbAnAnPrjBykMoTAByDs88VZ0D7bBjebtAslRREZoJg64QIJ_4IAvg86qeL7LSCZa_-y3CCaxQ5dT-EoZSo_uTGPFiYFVoY4c-DLNcQ2rzE0c3Ix_kBIU0WhCHfmksOrE7EuKIcbH26H4-MXyUNzfbPGKXK91GNQTj-heOcWicbuu9KD0fYTgFbhxQN_kfJ4HdUZC',
-  expDateMonth: '01',
-  expDateYear: '2020'
+  expDateMonth: 11,
+  expDateYear: 2020
 });
 const serviceRequest = new PaymentService();
 
@@ -100,5 +101,25 @@ describe('API calling', () => {
 
   afterEach(() => {
     mock.teardown();
+  });
+
+  test('getEndpoint method of Payment Service for endpointUrl-case 1', () => {
+    const deviceAPIObj = {
+      deviceEndpoint: 'http://localhost:9354/api/v1/payments',
+      encryptedPayload:
+        'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe'
+    };
+    const response = serviceRequest.getEndpoint(deviceAPIObj);
+    expect(response).toEqual(endpointUrl);
+  });
+
+  test('getEndpoint method of Payment Service for endpointUrl-case 2', () => {
+    const deviceAPIObj = {
+      deviceEndpoint: 'http://localhost:9354',
+      encryptedPayload:
+        'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe'
+    };
+    const response = serviceRequest.getEndpoint(deviceAPIObj);
+    expect(response).toEqual(endpointUrl);
   });
 });

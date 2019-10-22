@@ -1,5 +1,4 @@
 import { paymentConstants } from './PaymentConstants';
-
 export class PaymentService {
   private cardHolderName: string;
   private cardNumber: string;
@@ -14,10 +13,19 @@ export class PaymentService {
   private endpoint: string;
   private paymentMethodType: string;
   private worldlineSessionData: string;
+  private timeout: number = 60000;
+  private version: string = 'worldlinejs-1.1.0';
 
-  constructor(deviceAPIObj) {
+  constructor(deviceAPIObj: any) {
     this.encryptedPayload = deviceAPIObj.encryptedPayload;
-    this.endpoint = deviceAPIObj.deviceEndpoint;
+    this.endpoint = this.getEndpoint(deviceAPIObj);
+  }
+
+  public setRequestTimeout(timeout: number) {
+    if (timeout >= 2000) {
+      this.timeout = timeout;
+    }
+    return this;
   }
 
   public setWorldlineSessionData(worldlineSessionData: string) {
@@ -70,11 +78,12 @@ export class PaymentService {
     return this;
   }
 
-  public getPaymentMethods(paymentMethodType) {
+  public getPaymentMethods(paymentMethodType: string) {
     this.paymentMethodType = paymentMethodType;
     this.endpointUrl = this.endpoint.concat(paymentConstants.paymentMethodApi);
     return this;
   }
+
   public getRequestData() {
     const data = {
       cardHolderName: this.cardHolderName,
@@ -101,8 +110,16 @@ export class PaymentService {
     return new Promise((resolve, reject) => {
       const xhttp = new XMLHttpRequest();
       xhttp.open(this.method, this.endpointUrl, true);
-      xhttp.timeout = 60000;
-      xhttp.setRequestHeader('Content-type', 'application/json');
+      xhttp.timeout = this.timeout;
+      const headers = {
+        'Content-type': 'application/json',
+        'X-JS-SDK-VERSION': this.version
+      };
+      for (const key in headers) {
+        if (headers.hasOwnProperty(key)) {
+          xhttp.setRequestHeader(key, headers[key]);
+        }
+      }
 
       xhttp.onload = () => {
         if (xhttp.status >= 200 && xhttp.status < 300) {
@@ -134,5 +151,15 @@ export class PaymentService {
         xhttp.send();
       }
     });
+  }
+
+  private getEndpoint(deviceAPIObj: any) {
+    if (deviceAPIObj.deviceEndpoint) {
+      const endpointEndsIndex = deviceAPIObj.deviceEndpoint.indexOf('/api');
+      if (endpointEndsIndex !== -1) {
+        return deviceAPIObj.deviceEndpoint.substring(0, endpointEndsIndex);
+      }
+    }
+    return deviceAPIObj.deviceEndpoint;
   }
 }
