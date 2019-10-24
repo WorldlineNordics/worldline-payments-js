@@ -1,11 +1,23 @@
-export const endpointUrl = 'http://localhost:9354';
+export const paymentServiceObject = {
+  encryptedPayload:
+    'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
+  endpoint: 'http://localhost:9354',
+  method: 'POST',
+  timeout: 60000,
+  version: 'worldlinejs-1.1.0'
+};
 
 export const chdFormResponse = {
   cardHolderName: 'Mary',
   cardNumber: '4444333322221111',
   cvCode: '123',
+  encryptedPayload:
+    'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
+  endpoint: 'http://localhost:9354',
   expDateMonth: '12',
   expDateYear: '2020',
+  method: 'POST',
+  timeout: 60000,
   version: 'worldlinejs-1.1.0'
 };
 
