@@ -1,5 +1,5 @@
 import mock from 'xhr-mock';
-import { chdFormRequest, doc } from '../__mocks__/MockResponseConstants';
+import { chdFormRequest, doc, ibpDoc, paymentFormRequest } from '../__mocks__/MockResponseConstants';
 import { PaymentService } from '../PaymentService';
 
 const errResponse = {
@@ -137,6 +137,21 @@ describe('PaymentService', () => {
       .setWorldlineSessionData(wlnSessionData)
       .send();
     expect(spy).toBeCalledWith(JSON.stringify({ ...chdFormRequest, worldlineSessionData: wlnSessionData }));
+  });
+
+  it('calls paymentForm', async () => {
+    const tag = 'data-ibp';
+    mock.post(completeUrl('/api/v1/redirectpayments'), (req, res) => {
+      expect(req.header('content-type')).toEqual('application/json');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      return res.status(201).body(JSON.stringify({}));
+    });
+    const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
+    await serviceRequest
+      .redirectPayment()
+      .paymentForm(ibpDoc, tag)
+      .send();
+    expect(spy).toBeCalledWith(JSON.stringify(paymentFormRequest));
   });
 
   it('calls setRequestTimeout', () => {
