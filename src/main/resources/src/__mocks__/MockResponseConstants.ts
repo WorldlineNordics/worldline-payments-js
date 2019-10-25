@@ -1,131 +1,22 @@
-export const paymentServiceObject = {
-  encryptedPayload:
-    'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
-  endpoint: 'http://localhost:9354',
-  method: 'POST',
-  timeout: 60000,
-  version: 'worldlinejs-1.1.0'
-};
-
-export const initAuthResponse = {
-  encryptedPayload:
-    'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
-  endpoint: 'http://localhost:9354',
-  endpointUrl: 'http://localhost:9354/api/v1/initauthentication',
-  method: 'POST',
-  timeout: 60000,
-  version: 'worldlinejs-1.1.0'
-};
-
-export const continueAuthResponse = {
-  encryptedPayload:
-    'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
-  endpoint: 'http://localhost:9354',
-  endpointUrl: 'http://localhost:9354/api/v1/continueauthentication',
-  method: 'POST',
-  timeout: 60000,
-  version: 'worldlinejs-1.1.0'
-};
-
-export const cardPaymentResponse = {
-  encryptedPayload:
-    'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
-  endpoint: 'http://localhost:9354',
-  endpointUrl: 'http://localhost:9354/api/v1/payments',
-  method: 'POST',
-  timeout: 60000,
-  version: 'worldlinejs-1.1.0'
-};
-
-export const eftResponse = {
-  encryptedPayload:
-    'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
-  endpoint: 'http://localhost:9354',
-  endpointUrl: 'http://localhost:9354/api/v1/eftpayments',
-  method: 'POST',
-  timeout: 60000,
-  version: 'worldlinejs-1.1.0'
-};
-
-export const redirectPaymentResponse = {
-  encryptedPayload:
-    'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
-  endpoint: 'http://localhost:9354',
-  endpointUrl: 'http://localhost:9354/api/v1/redirectpayments',
-  method: 'POST',
-  timeout: 60000,
-  version: 'worldlinejs-1.1.0'
-};
-
-export const eftPaymentMethodResponse = {
-  encryptedPayload:
-    'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
-  endpoint: 'http://localhost:9354',
-  endpointUrl: 'http://localhost:9354/api/v1/paymentmethods',
-  method: 'POST',
-  paymentMethodType: 'eft',
-  timeout: 60000,
-  version: 'worldlinejs-1.1.0'
-};
-
-export const ewalletPaymentMethodResponse = {
-  encryptedPayload:
-    'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
-  endpoint: 'http://localhost:9354',
-  endpointUrl: 'http://localhost:9354/api/v1/paymentmethods',
-  method: 'POST',
-  paymentMethodType: 'ewallet',
-  timeout: 60000,
-  version: 'worldlinejs-1.1.0'
-};
-
-export const ibpPaymentMethodResponse = {
-  encryptedPayload:
-    'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
-  endpoint: 'http://localhost:9354',
-  endpointUrl: 'http://localhost:9354/api/v1/paymentmethods',
-  method: 'POST',
-  paymentMethodType: 'ibp',
-  timeout: 60000,
-  version: 'worldlinejs-1.1.0'
-};
-
-export const chdFormResponse = {
+export const chdFormRequest = {
   cardHolderName: 'Mary',
   cardNumber: '4444333322221111',
   cvCode: '123',
-  encryptedPayload:
-    'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
-  endpoint: 'http://localhost:9354',
+  encryptedPayload: 'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
   expDateMonth: '12',
-  expDateYear: '2020',
-  method: 'POST',
-  timeout: 60000,
-  version: 'worldlinejs-1.1.0'
+  expDateYear: '2020'
 };
 
-export const worldlineSessionDataResponse = {
-  encryptedPayload:
-    'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
+export const worldlineSessionDataRequest = {
+  encryptedPayload: 'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
   endpoint: 'http://localhost:9354',
   method: 'POST',
   timeout: 60000,
   version: 'worldlinejs-1.1.0',
-  worldlineSessionData:
-    'AXrQC9NS_euIzh6xkJgTiQe9iinHb-2LGhh8CqPKf2bRUmavnp-MkAIP4BxdsQWEoEs3cPFEC84JL4ahaZVawOgVrZdzUFo'
-};
-export const timeoutResponse = {
-  encryptedPayload:
-    'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
-  endpoint: 'http://localhost:9354',
-  method: 'POST',
-  timeout: 5000,
-  version: 'worldlinejs-1.1.0'
+  worldlineSessionData: 'AXrQC9NS_euIzh6xkJgTiQe9iinHb-2LGhh8CqPKf2bRUmavnp-MkAIP4BxdsQWEoEs3cPFEC84JL4ahaZVawOgVrZdzUFo'
 };
 
-export const doc = document.implementation.createHTMLDocument(
-  'ChildForm Document'
-);
+export const doc = document.implementation.createHTMLDocument('ChildForm Document');
 doc.body.innerHTML = `
 <input
 type="text"

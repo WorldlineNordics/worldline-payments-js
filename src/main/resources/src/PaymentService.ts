@@ -1,4 +1,3 @@
-import { paymentConstants } from './PaymentConstants';
 export class PaymentService {
   private cardHolderName: string;
   private cardNumber: string;
@@ -33,28 +32,46 @@ export class PaymentService {
     return this;
   }
 
+  public card(cardObj) {
+    if ('cardNumber' in cardObj) {
+      this.cardNumber = cardObj.cardNumber;
+    }
+    if ('cardHolderName' in cardObj) {
+      this.cardHolderName = cardObj.cardHolderName;
+    }
+    if ('cardExpiryMonth' in cardObj) {
+      this.expDateMonth = cardObj.cardExpiryMonth;
+    }
+    if ('cardExpiryYear' in cardObj) {
+      this.expDateYear = cardObj.cardExpiryYear;
+    }
+    if ('cardCVC' in cardObj) {
+      this.cvCode = cardObj.cardCVC;
+    }
+    return this;
+  }
+
   public initAuth() {
-    this.endpointUrl = this.endpoint.concat(paymentConstants.initAuthCardApi);
+    this.endpointUrl = this.endpoint.concat('/api/v1/initauthentication');
     return this;
   }
 
   public continueAuth() {
-    this.endpointUrl = this.endpoint.concat(
-      paymentConstants.continueAuthCardApi
-    );
+    this.endpointUrl = this.endpoint.concat('/api/v1/continueauthentication');
     return this;
   }
 
   public cardPayment() {
-    this.endpointUrl = this.endpoint.concat(paymentConstants.cardPaymentApi);
+    this.endpointUrl = this.endpoint.concat('/api/v1/payments');
     return this;
   }
   public redirectPayment() {
-    this.endpointUrl = this.endpoint.concat(paymentConstants.redirectApi);
+    this.endpointUrl = this.endpoint.concat('/api/v1/redirectpayments');
     return this;
   }
+
   public eftPayment() {
-    this.endpointUrl = this.endpoint.concat(paymentConstants.eftApi);
+    this.endpointUrl = this.endpoint.concat('/api/v1/eftpayments');
     return this;
   }
 
@@ -80,35 +97,20 @@ export class PaymentService {
 
   public getIbpPaymentMethods() {
     this.paymentMethodType = 'ibp';
-    this.endpointUrl = this.endpoint.concat(paymentConstants.paymentMethodApi);
+    this.endpointUrl = this.paymentMethodApi();
     return this;
   }
 
   public getEftPaymentMethods() {
     this.paymentMethodType = 'eft';
-    this.endpointUrl = this.endpoint.concat(paymentConstants.paymentMethodApi);
+    this.endpointUrl = this.paymentMethodApi();
     return this;
   }
 
   public getEWalletPaymentMethods() {
     this.paymentMethodType = 'ewallet';
-    this.endpointUrl = this.endpoint.concat(paymentConstants.paymentMethodApi);
+    this.endpointUrl = this.paymentMethodApi();
     return this;
-  }
-
-  public getRequestData() {
-    const data = {
-      cardHolderName: this.cardHolderName,
-      cardNumber: this.cardNumber,
-      cvCode: this.cvCode,
-      encryptedPayload: this.encryptedPayload,
-      expDateMonth: this.expDateMonth,
-      expDateYear: this.expDateYear,
-      paymentMethodId: this.paymentMethodId,
-      paymentMethodType: this.paymentMethodType,
-      worldlineSessionData: this.worldlineSessionData
-    };
-    return data;
   }
 
   public send() {
@@ -137,23 +139,12 @@ export class PaymentService {
         if (xhttp.status >= 200 && xhttp.status < 300) {
           resolve(JSON.parse(xhttp.response));
         } else {
-          const text =
-            xhttp.status === 405
-              ? 'Please verify the Worldline Device API URL'
-              : xhttp.statusText;
+          const text = xhttp.status === 405 ? 'Please verify the Worldline Device API URL' : xhttp.statusText;
           reject(getRejectObject(xhttp, text));
         }
       };
 
-      xhttp.onerror = () =>
-        reject(
-          getRejectObject(
-            xhttp,
-            xhttp.statusText === ''
-              ? 'Could not send transaction.'
-              : xhttp.statusText
-          )
-        );
+      xhttp.onerror = () => reject(getRejectObject(xhttp, xhttp.statusText === '' ? 'Could not send transaction.' : xhttp.statusText));
 
       xhttp.ontimeout = () => reject(getRejectObject(xhttp, xhttp.statusText));
 
@@ -163,6 +154,22 @@ export class PaymentService {
         xhttp.send();
       }
     });
+  }
+
+  private paymentMethodApi = () => this.endpoint.concat('/api/v1/paymentmethods');
+
+  private getRequestData() {
+    return {
+      cardHolderName: this.cardHolderName,
+      cardNumber: this.cardNumber,
+      cvCode: this.cvCode,
+      encryptedPayload: this.encryptedPayload,
+      expDateMonth: this.expDateMonth,
+      expDateYear: this.expDateYear,
+      paymentMethodId: this.paymentMethodId,
+      paymentMethodType: this.paymentMethodType,
+      worldlineSessionData: this.worldlineSessionData
+    };
   }
 
   private getEndpoint(deviceAPIObj: any) {
