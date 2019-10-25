@@ -77,37 +77,116 @@ describe('API calling', () => {
     expect(serviceRequest).toEqual(paymentServiceObject);
   });
 
-  it('should call initAuth method of PaymentService ', () => {
-    const response = serviceRequest.initAuth();
-    expect(response).toEqual(initAuthResponse);
+  it('should call initAuth method of PaymentService ', async () => {
+    serviceRequest.initAuth();
+    mock.post('http://localhost:9354/api/v1/initauthentication', (req, res) => {
+      expect(req.header('content-type')).toEqual('application/json');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      return res.status(201).body(JSON.stringify(initAuthResponse));
+    });
+    const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
+    await serviceRequest.send();
+    expect(spy).toBeCalledWith(
+      JSON.stringify({ encryptedPayload: deviceAPIObj.encryptedPayload })
+    );
   });
-  it('should call continueAuth method of PaymentService ', () => {
-    const response = serviceRequest.continueAuth();
-    expect(response).toEqual(continueAuthResponse);
+
+  it('should call continueAuth method of PaymentService ', async () => {
+    serviceRequest.continueAuth();
+    mock.post('http://localhost:9354/api/v1/continueauthentication', (req, res) => {
+      expect(req.header('content-type')).toEqual('application/json');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      return res.status(201).body(JSON.stringify(continueAuthResponse));
+    });
+    const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
+    await serviceRequest.send();
+    expect(spy).toBeCalledWith(
+      JSON.stringify({ encryptedPayload: deviceAPIObj.encryptedPayload })
+    );
   });
-  it('should call cardPayment method of PaymentService ', () => {
-    const response = serviceRequest.cardPayment();
-    expect(response).toEqual(cardPaymentResponse);
+
+  it('should call cardPayment method of PaymentService ', async () => {
+    serviceRequest.cardPayment();
+    mock.post('http://localhost:9354/api/v1/payments', (req, res) => {
+      expect(req.header('content-type')).toEqual('application/json');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      return res.status(201).body(JSON.stringify(cardPaymentResponse));
+    });
+    const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
+    await serviceRequest.send();
+    expect(spy).toBeCalledWith(
+      JSON.stringify({ encryptedPayload: deviceAPIObj.encryptedPayload })
+    );
   });
-  it('should call eftPayment method of PaymentService ', () => {
-    const response = serviceRequest.eftPayment();
-    expect(response).toEqual(eftResponse);
+  
+  it('should call eftPayment method of PaymentService ', async () => {
+    serviceRequest.eftPayment();
+    mock.post('http://localhost:9354/api/v1/eftpayments', (req, res) => {
+      expect(req.header('content-type')).toEqual('application/json');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      return res.status(201).body(JSON.stringify(eftResponse));
+    });
+    const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
+    await serviceRequest.send();
+    expect(spy).toBeCalledWith(
+      JSON.stringify({ encryptedPayload: deviceAPIObj.encryptedPayload })
+    );
   });
-  it('should call redirectPayment method of PaymentService ', () => {
-    const response = serviceRequest.redirectPayment();
-    expect(response).toEqual(redirectPaymentResponse);
+  
+  it('should call redirectPayment method of PaymentService ', async () => {
+    serviceRequest.redirectPayment();
+    mock.post('http://localhost:9354/api/v1/redirectpayments', (req, res) => {
+      expect(req.header('content-type')).toEqual('application/json');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      return res.status(201).body(JSON.stringify(redirectPaymentResponse));
+    });
+    const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
+    await serviceRequest.send();
+    expect(spy).toBeCalledWith(
+      JSON.stringify({ encryptedPayload: deviceAPIObj.encryptedPayload })
+    );
   });
-  it('should call getEWalletPaymentMethods method of PaymentService ', () => {
-    const response = serviceRequest.getEWalletPaymentMethods();
-    expect(response).toEqual(ewalletPaymentMethodResponse);
+  
+  it('should call getEWalletPaymentMethods method of PaymentService ',async  () => {
+    serviceRequest.getEWalletPaymentMethods();
+    mock.post('http://localhost:9354/api/v1/paymentmethods', (req, res) => {
+      expect(req.header('content-type')).toEqual('application/json');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      return res.status(201).body(JSON.stringify(ewalletPaymentMethodResponse));
+    });
+    const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
+    await serviceRequest.send();
+    expect(spy).toBeCalledWith(
+      JSON.stringify({ encryptedPayload: deviceAPIObj.encryptedPayload })
+    );
   });
-  it('should call getIbpPaymentMethods method of PaymentService ', () => {
-    const response = serviceRequest.getIbpPaymentMethods();
-    expect(response).toEqual(ibpPaymentMethodResponse);
+  
+  it('should call getIbpPaymentMethods method of PaymentService ', async () => {
+    serviceRequest.getIbpPaymentMethods();
+    mock.post('http://localhost:9354/api/v1/paymentmethods', (req, res) => {
+      expect(req.header('content-type')).toEqual('application/json');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      return res.status(201).body(JSON.stringify(ibpPaymentMethodResponse));
+    });
+    const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
+    await serviceRequest.send();
+    expect(spy).toBeCalledWith(
+      JSON.stringify({ encryptedPayload: deviceAPIObj.encryptedPayload })
+    );
   });
-  it('should call getEftPaymentMethods method of PaymentService ', () => {
-    const response = serviceRequest.getEftPaymentMethods();
-    expect(response).toEqual(eftPaymentMethodResponse);
+  
+  it('should call getEftPaymentMethods method of PaymentService ', async () => {
+    serviceRequest.getEftPaymentMethods();
+    mock.post('http://localhost:9354/api/v1/paymentmethods', (req, res) => {
+      expect(req.header('content-type')).toEqual('application/json');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      return res.status(201).body(JSON.stringify(eftPaymentMethodResponse));
+    });
+    const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
+    await serviceRequest.send();
+    expect(spy).toBeCalledWith(
+      JSON.stringify({ encryptedPayload: deviceAPIObj.encryptedPayload })
+    );
   });
 
   it('should call setWorldlineSessionData method of PaymentService ', () => {
