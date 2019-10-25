@@ -78,8 +78,20 @@ export class PaymentService {
     return this;
   }
 
-  public getPaymentMethods(paymentMethodType: string) {
-    this.paymentMethodType = paymentMethodType;
+  public getIbpPaymentMethods() {
+    this.paymentMethodType = 'ibp';
+    this.endpointUrl = this.endpoint.concat(paymentConstants.paymentMethodApi);
+    return this;
+  }
+
+  public getEftPaymentMethods() {
+    this.paymentMethodType = 'eft';
+    this.endpointUrl = this.endpoint.concat(paymentConstants.paymentMethodApi);
+    return this;
+  }
+
+  public getEWalletPaymentMethods() {
+    this.paymentMethodType = 'ewallet';
     this.endpointUrl = this.endpoint.concat(paymentConstants.paymentMethodApi);
     return this;
   }
