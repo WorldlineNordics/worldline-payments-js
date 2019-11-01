@@ -1,0 +1,14 @@
+{
+  "prettier.printWidth": 140,
+  "prettier.jsxSingleQuote": true,
+  "prettier.singleQuote": true,
+  "editor.formatOnSave": true,
+  "prettier.tslintIntegration": true,
+  "html.format.wrapLineLength": 140,
+  "javascript.preferences.quoteStyle": "single",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "workbench.colorCustomizations": {},
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  }
+}
