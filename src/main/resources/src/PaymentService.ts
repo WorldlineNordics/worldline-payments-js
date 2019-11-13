@@ -42,11 +42,20 @@ export class PaymentService {
     if ('cardExpiryMonth' in cardObj) {
       this.expDateMonth = cardObj.cardExpiryMonth;
     }
+    if ('expDateMonth' in cardObj) {
+      this.expDateMonth = cardObj.expDateMonth;
+    }
     if ('cardExpiryYear' in cardObj) {
       this.expDateYear = cardObj.cardExpiryYear;
     }
+    if ('expDateYear' in cardObj) {
+      this.expDateYear = cardObj.expDateYear;
+    }
     if ('cardCVC' in cardObj) {
       this.cvCode = cardObj.cardCVC;
+    }
+    if ('cvCode' in cardObj) {
+      this.cvCode = cardObj.cvCode;
     }
     return this;
   }

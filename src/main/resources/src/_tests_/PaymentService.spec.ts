@@ -52,7 +52,7 @@ describe('PaymentService', () => {
     expect(spy).toBeCalledWith(JSON.stringify(chdFormRequest));
   });
 
-  it('calls card and sets card attributes', async () => {
+  it('calls card and sets card attributes as cardHolderName, cardNumber, cardCVC, cardExpiryMonth, cardExpiryYear', async () => {
     mock.post(completeUrl('/api/v1/payments'), (req, res) => {
       expect(req.header('content-type')).toEqual('application/json');
       expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
@@ -60,11 +60,11 @@ describe('PaymentService', () => {
     });
     const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
     const cardObj = {
-      cardHolderName: chdFormRequest.cardHolderName,
-      cardNumber: chdFormRequest.cardNumber,
       cardCVC: chdFormRequest.cvCode,
       cardExpiryMonth: chdFormRequest.expDateMonth,
-      cardExpiryYear: chdFormRequest.expDateYear
+      cardExpiryYear: chdFormRequest.expDateYear,
+      cardHolderName: chdFormRequest.cardHolderName,
+      cardNumber: chdFormRequest.cardNumber,
     };
 
     await serviceRequest
@@ -72,6 +72,33 @@ describe('PaymentService', () => {
       .card(cardObj)
       .send();
     expect(spy).toBeCalledWith(JSON.stringify(chdFormRequest));
+    expect(serviceRequest['cvCode']).toEqual(chdFormRequest.cvCode);
+    expect(serviceRequest['expDateMonth']).toEqual(chdFormRequest.expDateMonth);
+    expect(serviceRequest['expDateYear']).toEqual(chdFormRequest.expDateYear);
+  });
+
+  it('calls card and sets card attributes as cardHolderName, cardNumber, cvCode, expDateMonth, expDateYear', async () => {
+    mock.post(completeUrl('/api/v1/payments'), (req, res) => {
+      expect(req.header('content-type')).toEqual('application/json');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      return res.status(201).body(JSON.stringify({}));
+    });
+   const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
+    const cardObj = {
+      cardHolderName: chdFormRequest.cardHolderName,
+      cardNumber: chdFormRequest.cardNumber,
+      cvCode: chdFormRequest.cvCode,
+      expDateMonth: chdFormRequest.expDateMonth,
+      expDateYear: chdFormRequest.expDateYear
+    };
+    await serviceRequest
+      .cardPayment()
+      .card(cardObj)
+      .send();
+    expect(spy).toBeCalledWith(JSON.stringify(chdFormRequest));
+    expect(serviceRequest['cvCode']).toEqual(chdFormRequest.cvCode);
+    expect(serviceRequest['expDateMonth']).toEqual(chdFormRequest.expDateMonth);
+    expect(serviceRequest['expDateYear']).toEqual(chdFormRequest.expDateYear);
   });
 
   it('calls getEndpoint method from the constructor of PaymentService class', () => {
