@@ -64,7 +64,7 @@ describe('PaymentService', () => {
       cardExpiryMonth: chdFormRequest.expDateMonth,
       cardExpiryYear: chdFormRequest.expDateYear,
       cardHolderName: chdFormRequest.cardHolderName,
-      cardNumber: chdFormRequest.cardNumber,
+      cardNumber: chdFormRequest.cardNumber
     };
 
     await serviceRequest
@@ -72,6 +72,8 @@ describe('PaymentService', () => {
       .card(cardObj)
       .send();
     expect(spy).toBeCalledWith(JSON.stringify(chdFormRequest));
+    expect(serviceRequest['cardHolderName']).toEqual(chdFormRequest.cardHolderName);
+    expect(serviceRequest['cardNumber']).toEqual(chdFormRequest.cardNumber);
     expect(serviceRequest['cvCode']).toEqual(chdFormRequest.cvCode);
     expect(serviceRequest['expDateMonth']).toEqual(chdFormRequest.expDateMonth);
     expect(serviceRequest['expDateYear']).toEqual(chdFormRequest.expDateYear);
@@ -83,7 +85,7 @@ describe('PaymentService', () => {
       expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
       return res.status(201).body(JSON.stringify({}));
     });
-   const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
+    const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
     const cardObj = {
       cardHolderName: chdFormRequest.cardHolderName,
       cardNumber: chdFormRequest.cardNumber,
@@ -96,6 +98,8 @@ describe('PaymentService', () => {
       .card(cardObj)
       .send();
     expect(spy).toBeCalledWith(JSON.stringify(chdFormRequest));
+    expect(serviceRequest['cardHolderName']).toEqual(chdFormRequest.cardHolderName);
+    expect(serviceRequest['cardNumber']).toEqual(chdFormRequest.cardNumber);
     expect(serviceRequest['cvCode']).toEqual(chdFormRequest.cvCode);
     expect(serviceRequest['expDateMonth']).toEqual(chdFormRequest.expDateMonth);
     expect(serviceRequest['expDateYear']).toEqual(chdFormRequest.expDateYear);
