@@ -72,11 +72,6 @@ describe('PaymentService', () => {
       .card(cardObj)
       .send();
     expect(spy).toBeCalledWith(JSON.stringify(chdFormRequest));
-    expect(serviceRequest['cardHolderName']).toEqual(chdFormRequest.cardHolderName);
-    expect(serviceRequest['cardNumber']).toEqual(chdFormRequest.cardNumber);
-    expect(serviceRequest['cvCode']).toEqual(chdFormRequest.cvCode);
-    expect(serviceRequest['expDateMonth']).toEqual(chdFormRequest.expDateMonth);
-    expect(serviceRequest['expDateYear']).toEqual(chdFormRequest.expDateYear);
   });
 
   it('calls card and sets card attributes as cardHolderName, cardNumber, cvCode, expDateMonth, expDateYear', async () => {
@@ -97,12 +92,6 @@ describe('PaymentService', () => {
       .cardPayment()
       .card(cardObj)
       .send();
-    expect(spy).toBeCalledWith(JSON.stringify(chdFormRequest));
-    expect(serviceRequest['cardHolderName']).toEqual(chdFormRequest.cardHolderName);
-    expect(serviceRequest['cardNumber']).toEqual(chdFormRequest.cardNumber);
-    expect(serviceRequest['cvCode']).toEqual(chdFormRequest.cvCode);
-    expect(serviceRequest['expDateMonth']).toEqual(chdFormRequest.expDateMonth);
-    expect(serviceRequest['expDateYear']).toEqual(chdFormRequest.expDateYear);
   });
 
   it('calls getEndpoint method from the constructor of PaymentService class', () => {
