@@ -92,6 +92,7 @@ describe('PaymentService', () => {
       .cardPayment()
       .card(cardObj)
       .send();
+      expect(spy).toBeCalledWith(JSON.stringify(chdFormRequest));
   });
 
   it('calls getEndpoint method from the constructor of PaymentService class', () => {
