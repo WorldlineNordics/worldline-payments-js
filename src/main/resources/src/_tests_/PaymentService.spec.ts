@@ -64,7 +64,10 @@ describe('PaymentService', () => {
       cardExpiryMonth: chdFormRequest.expDateMonth,
       cardExpiryYear: chdFormRequest.expDateYear,
       cardHolderName: chdFormRequest.cardHolderName,
-      cardNumber: chdFormRequest.cardNumber
+      cardNumber: chdFormRequest.cardNumber,
+      cvCode: undefined,
+      expDateMonth: undefined,
+      expDateYear: undefined
     };
 
     await serviceRequest
@@ -92,7 +95,7 @@ describe('PaymentService', () => {
       .cardPayment()
       .card(cardObj)
       .send();
-      expect(spy).toBeCalledWith(JSON.stringify(chdFormRequest));
+    expect(spy).toBeCalledWith(JSON.stringify(chdFormRequest));
   });
 
   it('calls getEndpoint method from the constructor of PaymentService class', () => {

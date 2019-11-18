@@ -33,30 +33,11 @@ export class PaymentService {
   }
 
   public card(cardObj) {
-    if ('cardNumber' in cardObj) {
-      this.cardNumber = cardObj.cardNumber;
-    }
-    if ('cardHolderName' in cardObj) {
-      this.cardHolderName = cardObj.cardHolderName;
-    }
-    if ('cardExpiryMonth' in cardObj) {
-      this.expDateMonth = cardObj.cardExpiryMonth;
-    }
-    if ('expDateMonth' in cardObj) {
-      this.expDateMonth = cardObj.expDateMonth;
-    }
-    if ('cardExpiryYear' in cardObj) {
-      this.expDateYear = cardObj.cardExpiryYear;
-    }
-    if ('expDateYear' in cardObj) {
-      this.expDateYear = cardObj.expDateYear;
-    }
-    if ('cardCVC' in cardObj) {
-      this.cvCode = cardObj.cardCVC;
-    }
-    if ('cvCode' in cardObj) {
-      this.cvCode = cardObj.cvCode;
-    }
+    this.cardNumber = this.getValueByAttribute(cardObj, ['cardNumber']);
+    this.cardHolderName = this.getValueByAttribute(cardObj, ['cardHolderName']);
+    this.expDateMonth = this.getValueByAttribute(cardObj, ['cardExpiryMonth', 'expDateMonth']);
+    this.expDateYear = this.getValueByAttribute(cardObj, ['cardExpiryYear', 'expDateYear']);
+    this.cvCode = this.getValueByAttribute(cardObj, ['cardCVC', 'cvCode']);
     return this;
   }
 
@@ -189,5 +170,11 @@ export class PaymentService {
       }
     }
     return deviceAPIObj.deviceEndpoint;
+  }
+
+  private getValueByAttribute(cardObj: any, attributes: string[]) {
+    if (!cardObj || !attributes) { return; }
+    const withVal = attributes.filter(a => a in cardObj).find(a => cardObj[a] !== undefined);
+    return cardObj[withVal];
   }
 }
