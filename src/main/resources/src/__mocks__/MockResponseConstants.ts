@@ -12,15 +12,6 @@ export const paymentFormRequest = {
   paymentMethodId: '12'
 };
 
-export const worldlineSessionDataRequest = {
-  encryptedPayload: 'BgAAA-wdjkb0rDBjsl_bx46s0RLrrlv9-N738QWCE0YezPC9cUAJfVmSunJQyP7lrOcnSbb8nJcMIXHYEHwMSz9g2kX3SxCuOpnGJe',
-  endpoint: 'http://localhost:9354',
-  method: 'POST',
-  timeout: 60000,
-  version: 'worldlinejs-1.1.0',
-  worldlineSessionData: 'AXrQC9NS_euIzh6xkJgTiQe9iinHb-2LGhh8CqPKf2bRUmavnp-MkAIP4BxdsQWEoEs3cPFEC84JL4ahaZVawOgVrZdzUFo'
-};
-
 export const ibpDoc = document.implementation.createHTMLDocument('IBP ChildForm Document');
 ibpDoc.body.innerHTML = `
 <div id="online_banking_details"> 
