@@ -127,7 +127,7 @@ export class PaymentService {
 
       xhttp.onload = () => {
         if (xhttp.status >= 200 && xhttp.status < 300) {
-          resolve(JSON.parse(xhttp.response));
+          resolve(xhttp.response ? JSON.parse(xhttp.response) : null);
         } else {
           const text = xhttp.status === 405 ? 'Please verify the Worldline Device API URL' : xhttp.statusText;
           reject(getRejectObject(xhttp, text));
