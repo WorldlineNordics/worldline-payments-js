@@ -13,7 +13,7 @@ export class PaymentService {
   private paymentMethodType: string;
   private worldlineSessionData: string;
   private timeout: number = 60000;
-  private version: string = 'worldlinejs-1.1.0';
+  private version: string = 'worldlinejs-1.3.0';
 
   constructor(deviceAPIObj: any) {
     this.encryptedPayload = deviceAPIObj.encryptedPayload;
