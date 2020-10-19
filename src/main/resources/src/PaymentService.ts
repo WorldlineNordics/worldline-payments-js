@@ -146,7 +146,7 @@ export class PaymentService {
     });
   }
 
-  private paymentMethodApi = () => this.endpoint.concat('/api/v1/paymentmethods');
+  private paymentMethodApi = () => this.endpoint.concat('/api/v1/devicepaymentmethods');
 
   private getRequestData() {
     return {
