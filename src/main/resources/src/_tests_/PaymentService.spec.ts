@@ -41,7 +41,7 @@ describe('PaymentService', () => {
     const tag = 'data-chd';
     mock.post(completeUrl('/api/v1/payments'), (req, res) => {
       expect(req.header('content-type')).toEqual('application/json');
-      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.3.0');
       return res.status(201).body(JSON.stringify({}));
     });
     const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
@@ -55,7 +55,7 @@ describe('PaymentService', () => {
   it('calls card and sets card attributes as cardHolderName, cardNumber, cardCVC, cardExpiryMonth, cardExpiryYear', async () => {
     mock.post(completeUrl('/api/v1/payments'), (req, res) => {
       expect(req.header('content-type')).toEqual('application/json');
-      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.3.0');
       return res.status(201).body(JSON.stringify({}));
     });
     const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
@@ -80,7 +80,7 @@ describe('PaymentService', () => {
   it('calls card and sets card attributes as cardHolderName, cardNumber, cvCode, expDateMonth, expDateYear', async () => {
     mock.post(completeUrl('/api/v1/payments'), (req, res) => {
       expect(req.header('content-type')).toEqual('application/json');
-      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.3.0');
       return res.status(201).body(JSON.stringify({}));
     });
     const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
@@ -123,7 +123,7 @@ describe('PaymentService', () => {
 
   it('calls eftPayment', () => {
     serviceRequest.eftPayment();
-    testApi(serviceRequest, '/api/v1/eftpaymentss');
+    testApi(serviceRequest, '/api/v1/eftpayments');
   });
 
   it('calls redirectPayment', () => {
@@ -133,24 +133,24 @@ describe('PaymentService', () => {
 
   it('calls getEWalletPaymentMethods', () => {
     serviceRequest.getEWalletPaymentMethods();
-    testApi(serviceRequest, '/api/v1/paymentmethods');
+    testApi(serviceRequest, '/api/v1/devicepaymentmethods');
   });
 
   it('calls getIbpPaymentMethods', () => {
     serviceRequest.getIbpPaymentMethods();
-    testApi(serviceRequest, '/api/v1/paymentmethods');
+    testApi(serviceRequest, '/api/v1/devicepaymentmethods');
   });
 
   it('calls getEftPaymentMethods', () => {
     serviceRequest.getEftPaymentMethods();
-    testApi(serviceRequest, '/api/v1/paymentmethods');
+    testApi(serviceRequest, '/api/v1/devicepaymentmethods');
   });
 
   it('calls setWorldlineSessionData', async () => {
     const tag = 'data-chd';
     mock.post(completeUrl('/api/v1/payments'), (req, res) => {
       expect(req.header('content-type')).toEqual('application/json');
-      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.3.0');
       return res.status(201).body(JSON.stringify({}));
     });
     const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
@@ -167,7 +167,7 @@ describe('PaymentService', () => {
     const tag = 'data-ibp';
     mock.post(completeUrl('/api/v1/redirectpayments'), (req, res) => {
       expect(req.header('content-type')).toEqual('application/json');
-      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.3.0');
       return res.status(201).body(JSON.stringify({}));
     });
     const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
@@ -191,7 +191,7 @@ describe('PaymentService', () => {
   const testApi = async (svc: PaymentService, path: string) => {
     mock.post(completeUrl(path), (req, res) => {
       expect(req.header('content-type')).toEqual('application/json');
-      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.1.0');
+      expect(req.header('x-js-sdk-version')).toEqual('worldlinejs-1.3.0');
       return res.status(201);
     });
     const spy = jest.spyOn((window as any).XMLHttpRequest.prototype, 'send');
